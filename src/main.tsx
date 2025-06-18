@@ -6,6 +6,7 @@ import { store } from "./app/store"
 import "./index.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-icons/font/bootstrap-icons.css"
+import { SnackbarProvider } from "notistack"
 
 const container = document.getElementById("root")
 
@@ -15,7 +16,14 @@ if (container) {
   root.render(
     <StrictMode>
       <Provider store={store}>
-        <App />
+        <SnackbarProvider
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+        >
+          <App />
+        </SnackbarProvider>
       </Provider>
     </StrictMode>,
   )

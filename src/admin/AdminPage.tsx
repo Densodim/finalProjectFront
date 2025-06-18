@@ -1,10 +1,13 @@
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
-import MainContent from "./MainContent";
-import SettingsPage from "./SettingsPage";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./Navbar"
+import Sidebar from "./Sidebar"
+import MainContent from "./MainContent"
+import SettingsPage from "./SettingsPage"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import { usersAPI } from "../api/users/users-api.tsx"
 
 export default function AdminPage() {
+  const users = usersAPI.getUsers()
+  console.log(users)
   return (
     <Router>
       <Navbar />
@@ -18,5 +21,5 @@ export default function AdminPage() {
         </div>
       </div>
     </Router>
-  );
+  )
 }
