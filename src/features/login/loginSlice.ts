@@ -2,8 +2,6 @@ import type { LoginApiType } from "./lib/zodLogin.ts"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { authAPI } from "../../api/auth/authAPI.ts"
 
-const tokenFromStorage = localStorage.getItem("token") ?? ""
-
 export type LoginSliceState = {
   user: LoginApiType["user"]
   status: "idle" | "loading" | "failed"
@@ -25,7 +23,7 @@ const initialState: LoginSliceState = {
   },
   status: "idle",
   error: null,
-  token: tokenFromStorage,
+  token: '',
 }
 
 export const loginAsync = createAsyncThunk(
@@ -55,8 +53,6 @@ export const loginSlice = createSlice({
         state.error = null
         state.user = action.payload.user
         state.token = action.payload.token
-
-        localStorage.setItem("token", action.payload.token)
       })
       .addCase(loginAsync.rejected, (state, action) => {
         state.status = "failed"

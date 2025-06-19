@@ -2,11 +2,12 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
 import { App } from "./App"
-import { store } from "./app/store"
+import { persist, store } from "./app/store"
 import "./index.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-icons/font/bootstrap-icons.css"
 import { SnackbarProvider } from "notistack"
+import { PersistGate } from "redux-persist/integration/react"
 
 const container = document.getElementById("root")
 
@@ -16,14 +17,16 @@ if (container) {
   root.render(
     <StrictMode>
       <Provider store={store}>
-        <SnackbarProvider
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
-        >
-          <App />
-        </SnackbarProvider>
+        <PersistGate persistor={persist} loading={null}>
+          <SnackbarProvider
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
+          >
+            <App />
+          </SnackbarProvider>
+        </PersistGate>
       </Provider>
     </StrictMode>,
   )
