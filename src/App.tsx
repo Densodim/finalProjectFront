@@ -10,6 +10,7 @@ export const App = () => {
   }
   return (
     <>
+      <button onClick={() => setLogin(false)}>Click</button>
       <AdminPage />
     </>
   )
