@@ -1,26 +1,21 @@
 import { useState } from "react"
-import {
-  Box,
-  Button,
-  IconButton,
-  InputAdornment,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from "@mui/material"
-import { Person, Visibility, VisibilityOff } from "@mui/icons-material"
+import { Box, Button } from "@mui/material"
 import { translations } from "./lib/translations.ts"
-import WrapperBox from "./lib/WrapperBox.tsx"
+import WrapperBox from "./lib/components/WrapperBox.tsx"
 import { useFormik } from "formik"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
-import { loginAsync, selectError } from "./loginSlice.ts"
+import { loginAsync, selectError, selectLanguage } from "./authSlice.ts"
 import { enqueueSnackbar } from "notistack"
+import ButtonLink from "../../utils/ButtonLink.tsx"
+import RegisterPage from "./RegisterPage.tsx"
+import HeaderForm from "./lib/components/HeaderForm.tsx"
+import WrapperTextField from "./lib/components/WrapperTextField.tsx"
 
 export default function SignInPage() {
-  const [lang, setLang] = useState<"ru" | "en">("ru")
-  const [showPassword, setShowPassword] = useState(false)
-  const t = translations[lang]
+  const [register, setRegister] = useState(false)
+
+  const currentLanguage = useAppSelector(selectLanguage)
+  const t = translations[currentLanguage]
 
   const dispatch = useAppDispatch()
   const error = useAppSelector(selectError)
@@ -42,6 +37,10 @@ export default function SignInPage() {
         return {
           password: "Password is required",
         }
+      } else if (values.password.length < 6) {
+        return {
+          password: "The minimum foam length should be 6 chapters",
+        }
       }
     },
     initialValues: {
@@ -53,61 +52,43 @@ export default function SignInPage() {
     },
   })
 
+  if (register) {
+    return <RegisterPage />
+  }
+
   return (
     <WrapperBox>
-      <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
-        <Person sx={{ fontSize: 48, color: "#1976d2" }} />
-        <Typography variant="h5" fontWeight={600} mt={1} mb={2}>
-          {t.login}
-        </Typography>
-        <ToggleButtonGroup
-          value={lang}
-          exclusive
-          onChange={(_, value) => value && setLang(value)}
-          size="small"
-          sx={{ mb: 1 }}
-        >
-          <ToggleButton value="ru">RU</ToggleButton>
-          <ToggleButton value="en">EN</ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
+      <HeaderForm title={t.login} />
       <Box component="form" onSubmit={formikLogin.handleSubmit}>
-        <TextField
-          fullWidth
-          margin="normal"
+        <WrapperTextField
           label={t.email}
+          fieldProps={formikLogin.getFieldProps("email")}
           placeholder={t.email}
-          {...formikLogin.getFieldProps("email")}
+          error={formikLogin.errors.email}
         />
-        {formikLogin.errors.email ? <div className='text-bg-info'>{formikLogin.errors.email}</div> : null}
-        <TextField
-          fullWidth
-          margin="normal"
+        <WrapperTextField
           label={t.password}
-          placeholder={t.enterPassword}
-          type={showPassword ? "text" : "password"}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(v => !v)} edge="end">
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          {...formikLogin.getFieldProps("password")}
+          fieldProps={formikLogin.getFieldProps("password")}
+          placeholder={t.password}
+          error={formikLogin.errors.password}
+          isPassword
         />
-        {formikLogin.errors.password ? <div className='text-bg-info'>{formikLogin.errors.password}</div> : null}
         <Button
           type="submit"
           variant="contained"
           color="primary"
           fullWidth
           sx={{ mt: 2 }}
-          onClick={() => enqueueSnackbar(error, {variant:'error'})}
+          onClick={() => enqueueSnackbar(error?.message, { variant: "error" })}
         >
           {t.submit}
         </Button>
+        <ButtonLink
+          value={t.register}
+          onClick={() => {
+            setRegister(true)
+          }}
+        />
       </Box>
     </WrapperBox>
   )

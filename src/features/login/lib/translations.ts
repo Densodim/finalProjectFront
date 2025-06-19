@@ -21,5 +21,8 @@ export const translations = {
     submit: "Sign In",
     submitRegister: "Register"
   },
-};
+} as const;
 
+
+export type Language = keyof typeof translations
+export type TranslationKey = keyof typeof translations["en"]
