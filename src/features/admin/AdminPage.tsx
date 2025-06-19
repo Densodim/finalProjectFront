@@ -1,9 +1,9 @@
-import Navbar from "./Navbar"
-import Sidebar from "./Sidebar"
-import MainContent from "./MainContent"
-import SettingsPage from "./SettingsPage"
+import Navbar from "./Navbar.tsx"
+import Sidebar from "./Sidebar.tsx"
+import MainContent from "./MainContent.tsx"
+import SettingsPage from "./SettingsPage.tsx"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
-import { usersAPI } from "../api/users/users-api.tsx"
+import { usersAPI } from "../../api/users/users-api.tsx"
 
 export default function AdminPage() {
   const users = usersAPI.getUsers()
