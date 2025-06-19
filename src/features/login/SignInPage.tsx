@@ -1,24 +1,18 @@
 import { useState } from "react"
-import {
-  Box,
-  Button,
-  IconButton,
-  InputAdornment,
-  TextField,
-} from "@mui/material"
-import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { Box, Button } from "@mui/material"
 import { translations } from "./lib/translations.ts"
 import WrapperBox from "./lib/WrapperBox.tsx"
 import { useFormik } from "formik"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
-import { loginAsync, selectError, selectLanguage } from "./loginSlice.ts"
+import { loginAsync, selectError, selectLanguage } from "./authSlice.ts"
 import { enqueueSnackbar } from "notistack"
 import ButtonLink from "../../utils/ButtonLink.tsx"
 import RegisterPage from "./RegisterPage.tsx"
 import HeaderForm from "./lib/HeaderForm.tsx"
+import WrapperTextField from "./lib/WrapperTextField.tsx"
 
 export default function SignInPage() {
-  const [showPassword, setShowPassword] = useState(false)
+  // const [showPassword, setShowPassword] = useState(false)
   const [register, setRegister] = useState(false)
 
   const currentLanguage = useAppSelector(selectLanguage)
@@ -44,6 +38,10 @@ export default function SignInPage() {
         return {
           password: "Password is required",
         }
+      } else if (values.password.length < 6) {
+        return {
+          password: "The minimum foam length should be 6",
+        }
       }
     },
     initialValues: {
@@ -61,39 +59,21 @@ export default function SignInPage() {
 
   return (
     <WrapperBox>
-      <HeaderForm />
+      <HeaderForm title={t.login} />
       <Box component="form" onSubmit={formikLogin.handleSubmit}>
-        <TextField
-          fullWidth
-          margin="normal"
+        <WrapperTextField
           label={t.email}
+          fieldProps={formikLogin.getFieldProps("email")}
           placeholder={t.email}
-          {...formikLogin.getFieldProps("email")}
         />
         {formikLogin.errors.email ? (
           <div className="text-bg-info">{formikLogin.errors.email}</div>
         ) : null}
-        <TextField
-          fullWidth
-          margin="normal"
+        <WrapperTextField
           label={t.password}
-          placeholder={t.enterPassword}
-          type={showPassword ? "text" : "password"}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => {
-                    setShowPassword(v => !v)
-                  }}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          {...formikLogin.getFieldProps("password")}
+          fieldProps={formikLogin.getFieldProps("password")}
+          placeholder={t.password}
+          error={formikLogin.errors.password}
         />
         {formikLogin.errors.password ? (
           <div className="text-bg-info">{formikLogin.errors.password}</div>
@@ -104,7 +84,7 @@ export default function SignInPage() {
           color="primary"
           fullWidth
           sx={{ mt: 2 }}
-          onClick={() => enqueueSnackbar(error, { variant: "error" })}
+          onClick={() => enqueueSnackbar(error?.message, { variant: "error" })}
         >
           {t.submit}
         </Button>

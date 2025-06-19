@@ -1,6 +1,6 @@
 import { persistReducer } from "redux-persist"
 import storage from "redux-persist/lib/storage"
-import { loginSlice } from "../features/login/loginSlice.ts"
+import { authSlice } from "../features/login/authSlice.ts"
 
 const persistConfig = {
   key: "login",
@@ -9,5 +9,5 @@ const persistConfig = {
 
 export const persistedLoginReducer = persistReducer(
   persistConfig,
-  loginSlice.reducer,
+  authSlice.reducer,
 )

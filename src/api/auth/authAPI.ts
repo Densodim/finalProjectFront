@@ -9,4 +9,12 @@ export const authAPI = {
     })
     return promise
   },
+  getRegister(email: string, password: string, name: string) {
+    const promise = instance.post<LoginApiType>("auth/register", {
+      email,
+      password,
+      name,
+    })
+    return promise
+  },
 }

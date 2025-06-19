@@ -9,9 +9,9 @@ import {
   REGISTER,
   REHYDRATE,
 } from "redux-persist"
-import { loginSlice } from "../features/login/loginSlice.ts"
+import { authSlice } from "../features/login/authSlice.ts"
 
-const rootReducer = combineSlices(loginSlice)
+const rootReducer = combineSlices(authSlice)
 
 export type RootState = ReturnType<typeof rootReducer>
 
