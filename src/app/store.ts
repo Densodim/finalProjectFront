@@ -5,14 +5,13 @@ import {
   FLUSH,
   PAUSE,
   PERSIST,
-  persistStore,
   PURGE,
   REGISTER,
   REHYDRATE,
 } from "redux-persist"
-import { persistedLoginReducer } from "./persist.ts"
+import { loginSlice } from "../features/login/loginSlice.ts"
 
-const rootReducer = combineSlices({ login: persistedLoginReducer })
+const rootReducer = combineSlices(loginSlice)
 
 export type RootState = ReturnType<typeof rootReducer>
 
@@ -40,7 +39,7 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
 
 export const store = makeStore()
 
-export const persist = persistStore(store)
+// export const persist = persistStore(store)
 
 // Infer the type of `store`
 export type AppStore = typeof store

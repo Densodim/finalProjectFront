@@ -1,29 +1,23 @@
 import type { LoginApiType } from "./lib/zodLogin.ts"
+import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { authAPI } from "../../api/auth/authAPI.ts"
+import type { Language } from "./lib/translations.ts"
 
 export type LoginSliceState = {
-  user: LoginApiType["user"]
+  user: LoginApiType["user"] | null
   status: "idle" | "loading" | "failed"
   error: string | null
   token: string | null
+  language: Language
 }
 
 const initialState: LoginSliceState = {
-  user: {
-    id: 0,
-    email: "",
-    password: "",
-    name: "",
-    role: "USER",
-    isActive: true,
-    createdAt: "",
-    updatedAt: "",
-    lastLoginAt: "",
-  },
+  user: null,
   status: "idle",
   error: null,
-  token: '',
+  token: "",
+  language: "en",
 }
 
 export const loginAsync = createAsyncThunk(
@@ -42,7 +36,13 @@ export const loginAsync = createAsyncThunk(
 export const loginSlice = createSlice({
   name: "login",
   initialState,
-  reducers: {},
+  reducers: create => ({
+    choosingLanguage: create.reducer(
+      (state, action: PayloadAction<Language>) => {
+        state.language = action.payload
+      },
+    ),
+  }),
   extraReducers: builder => {
     builder
       .addCase(loginAsync.pending, state => {
@@ -62,10 +62,12 @@ export const loginSlice = createSlice({
   selectors: {
     selectLogin: state => state.user,
     selectError: state => state.error,
+    selectLanguage: state => state.language,
   },
 })
 
-export const { selectLogin, selectError } = loginSlice.selectors
+export const { choosingLanguage } = loginSlice.actions
+export const { selectLogin, selectError, selectLanguage } = loginSlice.selectors
 
 //type
 type argType = {
