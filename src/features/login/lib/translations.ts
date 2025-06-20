@@ -8,7 +8,8 @@ export const translations = {
     enterUsername: "Введите логин",
     enterPassword: "Введите пароль",
     submit: "Войти",
-    submitRegister: "Зарегистрироваться"
+    submitRegister: "Зарегистрироваться",
+    cancel: 'Отмена'
   },
   en: {
     login: "Sign In",
@@ -19,7 +20,8 @@ export const translations = {
     enterUsername: "Enter username",
     enterPassword: "Enter password",
     submit: "Sign In",
-    submitRegister: "Register"
+    submitRegister: "Register",
+    cancel: 'Cancel',
   },
 } as const;
 

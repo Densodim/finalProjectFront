@@ -1,16 +1,37 @@
-import { Navigate, Outlet } from "react-router"
+import { Navigate, Outlet, useLocation } from "react-router"
 import { DashboardLayout } from "@toolpad/core/DashboardLayout"
 import { PageContainer } from "@toolpad/core/PageContainer"
+import { useAppSelector } from "../../app/hooks.ts"
+import {
+  selectIsAuthenticated,
+  selectIsAuthLoaded,
+  selectUserRole,
+} from "../login/authSlice.ts"
+import { LinearProgress } from "@mui/material"
 
 export default function Layout() {
-  // const location = useLocation()
-  const session = localStorage.getItem("token")
+  const location = useLocation()
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  const userRole = useAppSelector(selectUserRole)
+  const isLoaded = useAppSelector(selectIsAuthLoaded)
+  const path = location.pathname
 
-  if (session) {
-    // Add the `callbackUrl` search parameter
-    const redirectTo = `/sign-in`
+  // console.log("isAuthenticated:", isAuthenticated)
+  // console.log("userRole", userRole)
 
-    return <Navigate to={redirectTo} replace />
+  if (!isLoaded) {
+    return (
+      <div style={{ width: "100%" }}>
+        <LinearProgress />
+      </div>
+    )
+  }
+
+  if (!isAuthenticated && path !== "/sign-in" && path !== "/register") {
+    return <Navigate to={"/sign-in"} replace />
+  }
+  if (isAuthenticated && userRole === "USER" && path.startsWith("/admin")) {
+    return <Navigate to={"/"} replace />
   }
 
   return (

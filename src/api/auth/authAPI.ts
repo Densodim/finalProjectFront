@@ -17,4 +17,12 @@ export const authAPI = {
     })
     return promise
   },
+  getCurrentUser(token: string) {
+    const promise = instance.get("auth/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return promise
+  },
 }

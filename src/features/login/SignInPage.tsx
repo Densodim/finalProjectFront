@@ -1,24 +1,21 @@
-import { useState } from "react"
-import { Box, Button } from "@mui/material"
+import { Box, Button, Link } from "@mui/material"
 import { translations } from "./lib/translations.ts"
-import WrapperBox from "./lib/components/WrapperBox.tsx"
+import WrapperBox from "./components/WrapperBox.tsx"
 import { useFormik } from "formik"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
 import { loginAsync, selectError, selectLanguage } from "./authSlice.ts"
+import HeaderForm from "./components/HeaderForm.tsx"
+import WrapperTextField from "./components/WrapperTextField.tsx"
+import { useNavigate } from "react-router"
 import { enqueueSnackbar } from "notistack"
-import ButtonLink from "../../utils/ButtonLink.tsx"
-import RegisterPage from "./RegisterPage.tsx"
-import HeaderForm from "./lib/components/HeaderForm.tsx"
-import WrapperTextField from "./lib/components/WrapperTextField.tsx"
 
 export default function SignInPage() {
-  const [register, setRegister] = useState(false)
-
   const currentLanguage = useAppSelector(selectLanguage)
   const t = translations[currentLanguage]
 
   const dispatch = useAppDispatch()
   const error = useAppSelector(selectError)
+  const navigate = useNavigate()
 
   const formikLogin = useFormik({
     validate: values => {
@@ -48,12 +45,17 @@ export default function SignInPage() {
       password: "",
     },
     onSubmit: async values => {
-      await dispatch(loginAsync(values))
+      const result = await dispatch(loginAsync(values))
+      if (loginAsync.fulfilled.match(result)) {
+        navigate("/")
+      } else {
+        enqueueSnackbar(error?.message, { variant: "error" })
+      }
     },
   })
 
-  if (register) {
-    return <RegisterPage />
+  const handleNavigateRegister = async () => {
+    await navigate("/register")
   }
 
   return (
@@ -79,16 +81,16 @@ export default function SignInPage() {
           color="primary"
           fullWidth
           sx={{ mt: 2 }}
-          onClick={() => enqueueSnackbar(error?.message, { variant: "error" })}
         >
           {t.submit}
         </Button>
-        <ButtonLink
-          value={t.register}
-          onClick={() => {
-            setRegister(true)
-          }}
-        />
+        <Link
+          component={"button"}
+          variant={"body2"}
+          onClick={handleNavigateRegister}
+        >
+          {t.submitRegister}
+        </Link>
       </Box>
     </WrapperBox>
   )
