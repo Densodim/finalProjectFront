@@ -18,6 +18,7 @@ const initialState: LoginSliceState = {
   language: "en",
   message: "",
   isAuthenticated: false,
+  isAuthLoaded: false,
 }
 
 export const loginAsync = createAsyncThunk<
@@ -90,6 +91,9 @@ export const authSlice = createSlice({
       state.isAuthenticated = false
       localStorage.removeItem("token")
     }),
+    skipTokenCheck: create.reducer(state => {
+      state.isAuthLoaded = true
+    }),
   }),
   extraReducers: builder => {
     builder
@@ -134,6 +138,7 @@ export const authSlice = createSlice({
       .addCase(featchUserFromToken.fulfilled, (state, action) => {
         state.user = action.payload.user
         state.token = action.payload.token
+        state.isAuthLoaded = true
         state.isAuthenticated = true
         state.status = "idle"
         state.error = null
@@ -141,6 +146,7 @@ export const authSlice = createSlice({
       .addCase(featchUserFromToken.rejected, (state, action) => {
         state.status = "failed"
         state.error = action.payload ?? null
+        state.isAuthLoaded = true
         state.isAuthenticated = false
         state.user = null
         state.token = null
@@ -153,11 +159,12 @@ export const authSlice = createSlice({
     selectMessage: state => state.message,
     selectIsAuthenticated: state => state.isAuthenticated,
     selectUserRole: state => state.user?.role,
-    selectStatus: state => state.status
+    selectStatus: state => state.status,
+    selectIsAuthLoaded: state => state.isAuthLoaded,
   },
 })
 
-export const { choosingLanguage, signOut } = authSlice.actions
+export const { choosingLanguage, signOut, skipTokenCheck } = authSlice.actions
 export const {
   selectLogin,
   selectError,
@@ -165,7 +172,8 @@ export const {
   selectMessage,
   selectIsAuthenticated,
   selectUserRole,
-  selectStatus
+  selectStatus,
+  selectIsAuthLoaded,
 } = authSlice.selectors
 
 //type
@@ -190,4 +198,5 @@ export type LoginSliceState = {
   language: Language
   message: string | null
   isAuthenticated: boolean
+  isAuthLoaded: boolean
 }

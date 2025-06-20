@@ -4,7 +4,7 @@ import { PageContainer } from "@toolpad/core/PageContainer"
 import { useAppSelector } from "../../app/hooks.ts"
 import {
   selectIsAuthenticated,
-  selectStatus,
+  selectIsAuthLoaded,
   selectUserRole,
 } from "../login/authSlice.ts"
 import { LinearProgress } from "@mui/material"
@@ -13,22 +13,18 @@ export default function Layout() {
   const location = useLocation()
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const userRole = useAppSelector(selectUserRole)
-  const status = useAppSelector(selectStatus)
+  const isLoaded = useAppSelector(selectIsAuthLoaded)
   const path = location.pathname
 
-  console.log("isAuthenticated:", isAuthenticated)
-  console.log("userRole", userRole)
+  // console.log("isAuthenticated:", isAuthenticated)
+  // console.log("userRole", userRole)
 
-  if (status === "loading") {
+  if (!isLoaded) {
     return (
       <div style={{ width: "100%" }}>
         <LinearProgress />
       </div>
     )
-  }
-
-  if (!isAuthenticated) {
-    return null
   }
 
   if (!isAuthenticated && path !== "/sign-in" && path !== "/register") {

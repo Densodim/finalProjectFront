@@ -1,6 +1,6 @@
 import { useAppDispatch } from "../../../app/hooks.ts"
 import { useEffect } from "react"
-import { featchUserFromToken } from "../authSlice.ts"
+import { featchUserFromToken, skipTokenCheck } from "../authSlice.ts"
 
 export default function AuthInitializer() {
   const dispatch = useAppDispatch()
@@ -9,6 +9,8 @@ export default function AuthInitializer() {
     const token = localStorage.getItem("token")
     if (token) {
       dispatch(featchUserFromToken(token))
+    } else {
+      dispatch(skipTokenCheck())
     }
   }, [])
 
