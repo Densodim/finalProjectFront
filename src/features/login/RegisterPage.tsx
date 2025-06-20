@@ -1,20 +1,34 @@
 import WrapperBox from "./lib/components/WrapperBox.tsx"
-import { Box } from "@mui/material"
+import { Box, Button, Stack } from "@mui/material"
 import HeaderForm from "./lib/components/HeaderForm.tsx"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
-import { registerAsync, selectLanguage } from "./authSlice.ts"
+import {
+  registerAsync,
+  selectError,
+  selectLanguage,
+  selectMessage,
+} from "./authSlice.ts"
 import { translations } from "./lib/translations.ts"
 import { useFormik } from "formik"
 import WrapperTextField from "./lib/components/WrapperTextField.tsx"
+import { enqueueSnackbar } from "notistack"
+import { useNavigate } from "react-router"
 
 export default function RegisterPage() {
   const currentLanguage = useAppSelector(selectLanguage)
   const t = translations[currentLanguage]
-
+  const error = useAppSelector(selectError)
+  const message = useAppSelector(selectMessage)
   const dispatch = useAppDispatch()
- debugger
+  const navigate = useNavigate()
+
   const formikRegister = useFormik({
     validate: values => {
+      if (!values.name) {
+        return {
+          name: "Name is required",
+        }
+      }
       if (!values.email) {
         return {
           email: "Email is required",
@@ -35,11 +49,6 @@ export default function RegisterPage() {
           password: "The minimum foam length should be 6",
         }
       }
-      if (!values.name) {
-        return {
-          name: "Name is required",
-        }
-      }
     },
     initialValues: {
       email: "",
@@ -50,6 +59,17 @@ export default function RegisterPage() {
       await dispatch(registerAsync(values))
     },
   })
+
+  const handleReturn = async () => {
+    await navigate("/sign-in")
+  }
+  const handleSubmit = () => {
+    enqueueSnackbar(error?.message, { variant: "error" })
+    setTimeout(() => {
+      navigate("/sign-in")
+    }, 2000)
+  }
+
   return (
     <WrapperBox>
       <Box component="form" onSubmit={formikRegister.handleSubmit}>
@@ -61,12 +81,38 @@ export default function RegisterPage() {
           error={formikRegister.errors.name}
         />
         <WrapperTextField
+          label={t.email}
+          fieldProps={formikRegister.getFieldProps("email")}
+          placeholder={t.email}
+          error={formikRegister.errors.email}
+        />
+        <WrapperTextField
           label={t.password}
           fieldProps={formikRegister.getFieldProps("password")}
           placeholder={t.password}
           isPassword
           error={formikRegister.errors.password}
         />
+        {message && <div className="text-bg-success">{message}</div>}
+        <Stack spacing={2} direction={"row"}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+            onClick={handleSubmit}
+          >
+            {t.submit}
+          </Button>
+          <Button
+            type="submit"
+            variant="outlined"
+            color="primary"
+            onClick={handleReturn}
+          >
+            {t.cancel}
+          </Button>
+        </Stack>
       </Box>
     </WrapperBox>
   )

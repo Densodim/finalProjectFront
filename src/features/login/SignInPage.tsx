@@ -1,24 +1,21 @@
-import { useState } from "react"
-import { Box, Button } from "@mui/material"
+import { Box, Button, Link } from "@mui/material"
 import { translations } from "./lib/translations.ts"
 import WrapperBox from "./lib/components/WrapperBox.tsx"
 import { useFormik } from "formik"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
 import { loginAsync, selectError, selectLanguage } from "./authSlice.ts"
 import { enqueueSnackbar } from "notistack"
-import ButtonLink from "../../utils/ButtonLink.tsx"
-import RegisterPage from "./RegisterPage.tsx"
 import HeaderForm from "./lib/components/HeaderForm.tsx"
 import WrapperTextField from "./lib/components/WrapperTextField.tsx"
+import { useNavigate } from "react-router"
 
 export default function SignInPage() {
-  const [register, setRegister] = useState(false)
-
   const currentLanguage = useAppSelector(selectLanguage)
   const t = translations[currentLanguage]
 
   const dispatch = useAppDispatch()
   const error = useAppSelector(selectError)
+  const navigate = useNavigate()
 
   const formikLogin = useFormik({
     validate: values => {
@@ -52,10 +49,9 @@ export default function SignInPage() {
     },
   })
 
-  if (register) {
-    return <RegisterPage />
+  const handleNavigateRegister = async () => {
+    await navigate("/register")
   }
-
   return (
     <WrapperBox>
       <HeaderForm title={t.login} />
@@ -83,12 +79,13 @@ export default function SignInPage() {
         >
           {t.submit}
         </Button>
-        <ButtonLink
-          value={t.register}
-          onClick={() => {
-            setRegister(true)
-          }}
-        />
+        <Link
+          component={"button"}
+          variant={"body2"}
+          onClick={handleNavigateRegister}
+        >
+          {t.submitRegister}
+        </Link>
       </Box>
     </WrapperBox>
   )
