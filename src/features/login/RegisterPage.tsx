@@ -1,6 +1,6 @@
-import WrapperBox from "./lib/components/WrapperBox.tsx"
+import WrapperBox from "./components/WrapperBox.tsx"
 import { Box, Button, Stack } from "@mui/material"
-import HeaderForm from "./lib/components/HeaderForm.tsx"
+import HeaderForm from "./components/HeaderForm.tsx"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
 import {
   registerAsync,
@@ -10,7 +10,7 @@ import {
 } from "./authSlice.ts"
 import { translations } from "./lib/translations.ts"
 import { useFormik } from "formik"
-import WrapperTextField from "./lib/components/WrapperTextField.tsx"
+import WrapperTextField from "./components/WrapperTextField.tsx"
 import { enqueueSnackbar } from "notistack"
 import { useNavigate } from "react-router"
 

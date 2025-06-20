@@ -8,13 +8,16 @@ import {
   messageError,
 } from "./lib/getErrorAndStatusCode.ts"
 
+const initialToken = localStorage.getItem("token") || null
+
 const initialState: LoginSliceState = {
   user: null,
   status: "idle",
   error: null,
-  token: "",
+  token: initialToken,
   language: "en",
   message: "",
+  isAuthenticated: false,
 }
 
 export const loginAsync = createAsyncThunk<
@@ -54,6 +57,24 @@ export const registerAsync = createAsyncThunk<
   },
 )
 
+export const featchUserFromToken = createAsyncThunk<
+  LoginApiType,
+  string,
+  { rejectValue: RejectedPayload }
+>("auth/fetchUserFromToken", async (token, { rejectWithValue }) => {
+  try {
+    const response = await authAPI.getCurrentUser(token)
+    return response.data
+  } catch (e: any) {
+    const message = e.payload?.message || "Error"
+    return rejectWithValue({
+      message,
+      error: "",
+      statusCode: 0,
+    })
+  }
+})
+
 export const authSlice = createSlice({
   name: "login",
   initialState,
@@ -63,34 +84,66 @@ export const authSlice = createSlice({
         state.language = action.payload
       },
     ),
+    signOut: create.reducer(state => {
+      state.token = null
+      state.user = null
+      state.isAuthenticated = false
+      localStorage.removeItem("token")
+    }),
   }),
   extraReducers: builder => {
     builder
       .addCase(loginAsync.pending, state => {
         state.status = "loading"
+        state.isAuthenticated = false
       })
       .addCase(loginAsync.fulfilled, (state, action) => {
         state.status = "idle"
         state.error = null
         state.user = action.payload.user
         state.token = action.payload.token
+        state.isAuthenticated = true
+        localStorage.setItem("token", action.payload.token)
       })
       .addCase(loginAsync.rejected, (state, action) => {
         state.status = "failed"
         state.error = action.payload ?? null
+        state.isAuthenticated = false
       })
       .addCase(registerAsync.pending, state => {
         state.status = "loading"
+        state.isAuthenticated = false
       })
       .addCase(registerAsync.fulfilled, (state, action) => {
         state.status = "idle"
         state.message = "Successfully registered"
         state.user = action.payload.user
         state.token = action.payload.token
+        state.isAuthenticated = true
+        localStorage.setItem("token", action.payload.token)
       })
       .addCase(registerAsync.rejected, (state, action) => {
         state.status = "failed"
         state.error = action.payload ?? null
+        state.isAuthenticated = false
+      })
+      .addCase(featchUserFromToken.pending, state => {
+        state.status = "loading"
+        state.isAuthenticated = false
+      })
+      .addCase(featchUserFromToken.fulfilled, (state, action) => {
+        state.user = action.payload.user
+        state.token = action.payload.token
+        state.isAuthenticated = true
+        state.status = "idle"
+        state.error = null
+      })
+      .addCase(featchUserFromToken.rejected, (state, action) => {
+        state.status = "failed"
+        state.error = action.payload ?? null
+        state.isAuthenticated = false
+        state.user = null
+        state.token = null
       })
   },
   selectors: {
@@ -98,11 +151,22 @@ export const authSlice = createSlice({
     selectError: state => state.error,
     selectLanguage: state => state.language,
     selectMessage: state => state.message,
+    selectIsAuthenticated: state => state.isAuthenticated,
+    selectUserRole: state => state.user?.role,
+    selectStatus: state => state.status
   },
 })
 
-export const { choosingLanguage } = authSlice.actions
-export const { selectLogin, selectError, selectLanguage, selectMessage } = authSlice.selectors
+export const { choosingLanguage, signOut } = authSlice.actions
+export const {
+  selectLogin,
+  selectError,
+  selectLanguage,
+  selectMessage,
+  selectIsAuthenticated,
+  selectUserRole,
+  selectStatus
+} = authSlice.selectors
 
 //type
 type argLoginType = {
@@ -125,4 +189,5 @@ export type LoginSliceState = {
   token: string | null
   language: Language
   message: string | null
+  isAuthenticated: boolean
 }

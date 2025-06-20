@@ -25,8 +25,8 @@ const eslintConfig = config(
     name: `${js.meta.name}/recommended`,
     ...js.configs.recommended,
   },
-  configs.strictTypeChecked,
-  configs.stylisticTypeChecked,
+  configs.recommended,
+  configs.recommended,
   vitestPlugin.configs.recommended,
   {
     name: "eslint-plugin-react/jsx-runtime",

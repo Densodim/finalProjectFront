@@ -1,13 +1,13 @@
 import { Box, Button, Link } from "@mui/material"
 import { translations } from "./lib/translations.ts"
-import WrapperBox from "./lib/components/WrapperBox.tsx"
+import WrapperBox from "./components/WrapperBox.tsx"
 import { useFormik } from "formik"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
 import { loginAsync, selectError, selectLanguage } from "./authSlice.ts"
-import { enqueueSnackbar } from "notistack"
-import HeaderForm from "./lib/components/HeaderForm.tsx"
-import WrapperTextField from "./lib/components/WrapperTextField.tsx"
+import HeaderForm from "./components/HeaderForm.tsx"
+import WrapperTextField from "./components/WrapperTextField.tsx"
 import { useNavigate } from "react-router"
+import { enqueueSnackbar } from "notistack"
 
 export default function SignInPage() {
   const currentLanguage = useAppSelector(selectLanguage)
@@ -45,13 +45,19 @@ export default function SignInPage() {
       password: "",
     },
     onSubmit: async values => {
-      await dispatch(loginAsync(values))
+      const result = await dispatch(loginAsync(values))
+      if (loginAsync.fulfilled.match(result)) {
+        navigate("/")
+      } else {
+        enqueueSnackbar(error?.message, { variant: "error" })
+      }
     },
   })
 
   const handleNavigateRegister = async () => {
     await navigate("/register")
   }
+
   return (
     <WrapperBox>
       <HeaderForm title={t.login} />
@@ -75,7 +81,6 @@ export default function SignInPage() {
           color="primary"
           fullWidth
           sx={{ mt: 2 }}
-          onClick={() => enqueueSnackbar(error?.message, { variant: "error" })}
         >
           {t.submit}
         </Button>

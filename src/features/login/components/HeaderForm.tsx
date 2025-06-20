@@ -1,8 +1,8 @@
 import { Box, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material"
 import { Person } from "@mui/icons-material"
-import type { Language } from "../translations.ts"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks.ts"
-import { choosingLanguage, selectLanguage } from "../../authSlice.ts"
+import type { Language } from "../lib/translations.ts"
+import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts"
+import { choosingLanguage, selectLanguage } from "../authSlice.ts"
 
 export default function HeaderForm({ title }: { title:string }) {
   const currentLanguage = useAppSelector(selectLanguage)
