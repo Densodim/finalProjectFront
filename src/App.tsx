@@ -3,30 +3,12 @@ import { Provider } from "react-redux"
 import { store } from "./app/store.ts"
 import { SnackbarProvider } from "notistack"
 import { ReactRouterAppProvider } from "@toolpad/core/react-router"
-import type { Navigation } from "@toolpad/core/AppProvider"
-import DashboardIcon from "@mui/icons-material/Dashboard"
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import { Outlet } from "react-router"
 import AuthInitializer from "./features/login/components/AuthInitializer.tsx"
-
-const NAVIGATION: Navigation = [
-  {
-    kind: "header",
-    title: "Main items",
-  },
-  {
-    title: "Dashboard",
-    icon: <DashboardIcon />,
-  },
-  {
-    segment: "orders",
-    title: "Orders",
-    icon: <ShoppingCartIcon />,
-  },
-]
+import { NAVIGATION } from "./router/NAVIGATION.tsx"
 
 const BRANDING = {
-  title: "My Toolpad Core App",
+  title: "Final Project clone Google form",
 }
 
 export const App = () => {

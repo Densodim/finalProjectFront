@@ -8,13 +8,11 @@ import {
   messageError,
 } from "./lib/getErrorAndStatusCode.ts"
 
-const initialToken = localStorage.getItem("token") || null
-
 const initialState: LoginSliceState = {
   user: null,
   status: "idle",
   error: null,
-  token: initialToken,
+  token: "",
   language: "en",
   message: "",
   isAuthenticated: false,
@@ -161,6 +159,7 @@ export const authSlice = createSlice({
     selectUserRole: state => state.user?.role,
     selectStatus: state => state.status,
     selectIsAuthLoaded: state => state.isAuthLoaded,
+    selectToken: state => state.token,
   },
 })
 
@@ -174,6 +173,7 @@ export const {
   selectUserRole,
   selectStatus,
   selectIsAuthLoaded,
+  selectToken,
 } = authSlice.selectors
 
 //type
@@ -184,7 +184,7 @@ type argLoginType = {
 type argRegisterType = argLoginType & {
   name: string
 }
-type RejectedPayload = {
+export type RejectedPayload = {
   message: string
   error: string
   statusCode: number
