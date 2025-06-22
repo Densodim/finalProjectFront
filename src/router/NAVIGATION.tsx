@@ -3,7 +3,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard"
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"
 import GroupIcon from "@mui/icons-material/Group"
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter"
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+
 
 export const NAVIGATION: Navigation = [
   {
@@ -19,11 +19,6 @@ export const NAVIGATION: Navigation = [
     title: "Admin",
     icon: <AdminPanelSettingsIcon />,
     children: [
-      {
-        segment: "",
-        title: "Admin Page",
-        icon: <SupervisorAccountIcon/>
-      },
       {
         segment: "allUsers",
         title: "All Users",

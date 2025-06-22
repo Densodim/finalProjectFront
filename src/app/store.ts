@@ -10,8 +10,9 @@ import {
   REHYDRATE,
 } from "redux-persist"
 import { authSlice } from "../features/login/authSlice.ts"
+import { adminSlice } from "../features/admin/adminSlice.ts"
 
-const rootReducer = combineSlices(authSlice)
+const rootReducer = combineSlices(authSlice, adminSlice)
 
 export type RootState = ReturnType<typeof rootReducer>
 

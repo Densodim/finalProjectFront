@@ -7,7 +7,8 @@ import AdminPage from "../features/admin/AdminPage.tsx"
 import SignInPage from "../features/login/SignInPage.tsx"
 import RegisterPage from "../features/login/RegisterPage.tsx"
 import FormPage from "../features/forms/FormsPage.tsx"
-import AllUsersPage from "../features/admin/AllUsersPage.tsx"
+import AllUsersPage from "../features/admin/components/users/AllUsersPage.tsx"
+import CreateUserPage from "../features/admin/components/users/createUserPage.tsx"
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
               {
                 path: 'allUsers',
                 Component: AllUsersPage
+              },
+              {
+                path: 'createUser',
+                Component: CreateUserPage
               }
             ]
           },
