@@ -3,45 +3,47 @@ import { IconButton, InputAdornment, TextField } from "@mui/material"
 import { useState } from "react"
 
 export default function WrapperTextField({
-                                        label,
-                                        placeholder,
-                                        type = "text",
-                                        error,
-                                        fieldProps,
-                                        isPassword = false,
-                                      }: Props) {
+                                           label,
+                                           placeholder,
+                                           type = "text",
+                                           error,
+                                           fieldProps,
+                                           fullWidth = false,
+                                           isPassword = false
+                                         }: Props) {
   const [showPassword, setShowPassword] = useState(false)
 
   const actualType = isPassword ? (showPassword ? "text" : "password") : type
 
-
   return (
     <>
       <TextField
-        fullWidth
         margin="normal"
         label={label}
         placeholder={placeholder}
         type={actualType}
         {...fieldProps}
-        InputProps={
-          isPassword
-            ? {
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => { setShowPassword(v => !v); }}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }
-            : undefined
+        fullWidth={fullWidth}
+      InputProps={
+      isPassword
+        ? {
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => {
+                  setShowPassword(v => !v)
+                }}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          )
         }
+        : undefined
+    }
       />
-      {error && <div className="text-bg-info">{error}</div>}
+      {error && <div className="text-danger">{error}</div>}
     </>
   )
 }
@@ -53,4 +55,5 @@ type Props = {
   error?: string
   fieldProps: any
   isPassword?: boolean
+  fullWidth?: boolean
 }

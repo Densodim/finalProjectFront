@@ -67,6 +67,7 @@ export default function SignInPage() {
           fieldProps={formikLogin.getFieldProps("email")}
           placeholder={t.email}
           error={formikLogin.errors.email}
+          fullWidth
         />
         <WrapperTextField
           label={t.password}
@@ -74,6 +75,7 @@ export default function SignInPage() {
           placeholder={t.password}
           error={formikLogin.errors.password}
           isPassword
+          fullWidth
         />
         <Button
           type="submit"
