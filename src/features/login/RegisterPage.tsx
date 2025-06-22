@@ -79,21 +79,24 @@ export default function RegisterPage() {
           fieldProps={formikRegister.getFieldProps("name")}
           placeholder={t.username}
           error={formikRegister.errors.name}
+          fullWidth
         />
         <WrapperTextField
           label={t.email}
           fieldProps={formikRegister.getFieldProps("email")}
           placeholder={t.email}
           error={formikRegister.errors.email}
+          fullWidth
         />
         <WrapperTextField
           label={t.password}
           fieldProps={formikRegister.getFieldProps("password")}
           placeholder={t.password}
           isPassword
+          fullWidth
           error={formikRegister.errors.password}
         />
-        {message && <div className="text-bg-success">{message}</div>}
+        {message && <div className="text-danger">{message}</div>}
         <Stack spacing={2} direction={"row"}>
           <Button
             type="submit"

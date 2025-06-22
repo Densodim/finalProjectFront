@@ -1,6 +1,7 @@
 import type { LoginApiType } from "./lib/zodLogin.ts"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import type { UserRole } from "../../api/auth/authAPI.ts"
 import { authAPI } from "../../api/auth/authAPI.ts"
 import type { Language } from "./lib/translations.ts"
 import {
@@ -44,9 +45,9 @@ export const registerAsync = createAsyncThunk<
   { rejectValue: RejectedPayload }
 >(
   "auth/registerAsync",
-  async ({ email, password, name }, { rejectWithValue }) => {
+  async ({ email, password, name, role }, { rejectWithValue }) => {
     try {
-      const response = await authAPI.getRegister(email, password, name)
+      const response = await authAPI.getRegister(email, password, name, role)
       return response.data
     } catch (e) {
       const message = messageError(e)
@@ -64,7 +65,7 @@ export const featchUserFromToken = createAsyncThunk<
   try {
     const response = await authAPI.getCurrentUser(token)
     return response.data
-  } catch (e: any) {
+  } catch (e:any) {
     const message = e.payload?.message || "Error"
     return rejectWithValue({
       message,
@@ -183,6 +184,7 @@ type argLoginType = {
 }
 type argRegisterType = argLoginType & {
   name: string
+  role?: UserRole
 }
 export type RejectedPayload = {
   message: string
