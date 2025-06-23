@@ -56,7 +56,6 @@ export default function AllUsersPage() {
         <Button
           startIcon={<AddIcon />}
           onClick={handleCreateUser}
-          disabled={!selectedRows?.ids}
         >
           Create User
         </Button>
