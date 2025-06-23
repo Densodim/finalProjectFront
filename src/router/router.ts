@@ -9,6 +9,7 @@ import RegisterPage from "../features/login/RegisterPage.tsx"
 import FormPage from "../features/forms/FormsPage.tsx"
 import AllUsersPage from "../features/admin/components/users/AllUsersPage.tsx"
 import CreateUserPage from "../features/admin/components/users/createUserPage.tsx"
+import EditUserPage from "../features/admin/components/users/editUserPage.tsx"
 
 export const router = createBrowserRouter([
   {
@@ -33,14 +34,18 @@ export const router = createBrowserRouter([
             Component: AdminPage,
             children: [
               {
-                path: 'allUsers',
-                Component: AllUsersPage
+                path: "allUsers",
+                Component: AllUsersPage,
               },
               {
-                path: 'createUser',
-                Component: CreateUserPage
-              }
-            ]
+                path: "createUser",
+                Component: CreateUserPage,
+              },
+              {
+                path: `editUser/:id`,
+                Component: EditUserPage,
+              },
+            ],
           },
         ],
       },

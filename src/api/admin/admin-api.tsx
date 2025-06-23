@@ -9,6 +9,14 @@ export const adminApi = {
     })
     return promise
   },
+  getUser(token: string, id: number) {
+    const promise = instance.get(`users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return promise
+  },
   deleteUser(token: string, id: number) {
     const promise = instance.delete(`users/${id}`, {
       headers: {
