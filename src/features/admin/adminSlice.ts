@@ -7,6 +7,8 @@ import { adminApi } from "../../api/admin/admin-api.tsx"
 const initialState: AdminSliceType = {
   users: [],
   status: "idle",
+  error: "",
+  message: "",
 }
 
 export const fetchAllUsers = createAsyncThunk<
@@ -16,6 +18,24 @@ export const fetchAllUsers = createAsyncThunk<
 >("admin/fetchUsers", async (token, { rejectWithValue }) => {
   try {
     const response = await adminApi.getUsers(token)
+    return response.data
+  } catch (e: any) {
+    const message = e.payload?.message || "Error"
+    return rejectWithValue({
+      message,
+      error: "",
+      statusCode: 0,
+    })
+  }
+})
+
+export const deleteUserThunk = createAsyncThunk<
+  UsersTypeAPI,
+  argDeleteType,
+  { rejectValue: RejectedPayload }
+>("admin/deleteUserThunk", async ({ token, id }, { rejectWithValue }) => {
+  try {
+    const response = await adminApi.deleteUser(token, id)
     return response.data
   } catch (e: any) {
     const message = e.payload?.message || "Error"
@@ -43,6 +63,27 @@ export const adminSlice = createSlice({
           state.users = action.payload
         },
       )
+      .addCase(
+        fetchAllUsers.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(deleteUserThunk.pending, state => {
+        state.status = "loading"
+      })
+      .addCase(deleteUserThunk.fulfilled, state => {
+        state.status = "idle"
+        state.message = "Delete successfully."
+      })
+      .addCase(
+        deleteUserThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
   },
   selectors: {
     selectAllUsers: state => state.users,
@@ -56,4 +97,11 @@ export const { selectAllUsers } = adminSlice.selectors
 type AdminSliceType = {
   users: UsersTypeAPI[] | null
   status: "idle" | "loading" | "failed"
+  error: string | undefined
+  message: string
+}
+
+type argDeleteType = {
+  token: string
+  id: number
 }

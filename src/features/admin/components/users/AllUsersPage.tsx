@@ -1,5 +1,9 @@
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks.ts"
-import { fetchAllUsers, selectAllUsers } from "../../adminSlice.ts"
+import {
+  deleteUserThunk,
+  fetchAllUsers,
+  selectAllUsers,
+} from "../../adminSlice.ts"
 import { useEffect, useState } from "react"
 import { selectToken } from "../../../login/authSlice.ts"
 import { Button, ButtonGroup, Paper } from "@mui/material"
@@ -24,7 +28,8 @@ const paginationModel = { page: 0, pageSize: 5 }
 
 export default function AllUsersPage() {
   const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>()
-  console.log(selectedRows)
+  const gridRowId = selectedRows?.ids ? Array.from(selectedRows?.ids) : []
+  // console.log(id)
 
   const navigate = useNavigate()
 
@@ -49,24 +54,36 @@ export default function AllUsersPage() {
     }
   }, [token])
 
-  const handleDeleteUsers = () => {
-    console.log(selectedRows)
+  const handleDeleteUsers = async () => {
+    for (const id of gridRowId) {
+      await dispatch(
+        deleteUserThunk({
+          id: Number(id),
+          token,
+        }),
+      )
+    }
+    if (token) {
+      dispatch(fetchAllUsers(token))
+    }
+    setSelectedRows(undefined)
   }
 
   const handleCreateUser = () => {
-    navigate('/admin/createUser')
+    navigate("/admin/createUser")
   }
 
   return (
     <>
       <ButtonGroup variant="outlined" aria-label="Loading button group">
-        <Button startIcon={<AddIcon />} onClick={handleCreateUser}>
+        <Button startIcon={<AddIcon />} onClick={handleCreateUser} disabled={!selectedRows?.ids}>
           Create User
         </Button>
         <Button
           startIcon={<DeleteIcon />}
           color="error"
           onClick={handleDeleteUsers}
+          disabled={!selectedRows?.ids}
         >
           Delete
         </Button>

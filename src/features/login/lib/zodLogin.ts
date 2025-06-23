@@ -19,5 +19,4 @@ export const zodLogin = z.object({
   token: z.string(),
 })
 
-
 export type LoginApiType = z.infer<typeof zodLogin>

@@ -70,7 +70,6 @@ export default function CreateUserPage() {
         sx={{ width: "25ch" }}
         autoComplete="off"
       >
-
         <WrapperTextField
           label={"username"}
           fieldProps={formik.getFieldProps("name")}
