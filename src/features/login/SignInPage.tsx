@@ -1,13 +1,20 @@
-import { Box, Button, Link } from "@mui/material"
+import { Box, Button, LinearProgress, Link } from "@mui/material"
 import { translations } from "./lib/translations.ts"
 import WrapperBox from "./components/WrapperBox.tsx"
 import { useFormik } from "formik"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
-import { loginAsync, selectError, selectLanguage } from "./authSlice.ts"
+import {
+  loginAsync,
+  selectError,
+  selectLanguage,
+  selectStatus,
+} from "./authSlice.ts"
 import HeaderForm from "./components/HeaderForm.tsx"
 import WrapperTextField from "./components/WrapperTextField.tsx"
 import { useNavigate } from "react-router"
 import { enqueueSnackbar } from "notistack"
+import { zodSingIn } from "./lib/zodLogin.ts"
+import { toFormikValidationSchema } from "zod-formik-adapter"
 
 export default function SignInPage() {
   const currentLanguage = useAppSelector(selectLanguage)
@@ -16,30 +23,10 @@ export default function SignInPage() {
   const dispatch = useAppDispatch()
   const error = useAppSelector(selectError)
   const navigate = useNavigate()
+  const isLoading = useAppSelector(selectStatus)
 
   const formikLogin = useFormik({
-    validate: values => {
-      if (!values.email) {
-        return {
-          email: "Email is required",
-        }
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      ) {
-        return {
-          email: "Invalid email address",
-        }
-      }
-      if (!values.password) {
-        return {
-          password: "Password is required",
-        }
-      } else if (values.password.length < 6) {
-        return {
-          password: "The minimum foam length should be 6 chapters",
-        }
-      }
-    },
+    validationSchema: toFormikValidationSchema(zodSingIn),
     initialValues: {
       email: "",
       password: "",
@@ -56,6 +43,14 @@ export default function SignInPage() {
 
   const handleNavigateRegister = async () => {
     await navigate("/register")
+  }
+
+  if (isLoading === "loading") {
+    return (
+      <div style={{ width: "100%" }}>
+        <LinearProgress />
+      </div>
+    )
   }
 
   return (
@@ -88,6 +83,7 @@ export default function SignInPage() {
         </Button>
         <Link
           component={"button"}
+          type="submit"
           variant={"body2"}
           onClick={handleNavigateRegister}
         >

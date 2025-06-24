@@ -85,7 +85,7 @@ export const authSlice = createSlice({
       },
     ),
     signOut: create.reducer(state => {
-      state.token = null
+      state.token = ''
       state.user = null
       state.isAuthenticated = false
       localStorage.removeItem("token")
@@ -148,7 +148,7 @@ export const authSlice = createSlice({
         state.isAuthLoaded = true
         state.isAuthenticated = false
         state.user = null
-        state.token = null
+        state.token = ''
       })
   },
   selectors: {
@@ -196,7 +196,7 @@ export type LoginSliceState = {
   user: LoginApiType["user"] | null
   status: "idle" | "loading" | "failed"
   error: RejectedPayload | null
-  token: string | null
+  token: string
   language: Language
   message: string | null
   isAuthenticated: boolean
