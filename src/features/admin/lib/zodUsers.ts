@@ -20,7 +20,7 @@ export const zodUsers = z.object({
     message: "The password must be at least 6 characters long",
   }),
   role: z.union(
-    [z.literal("USER"), z.literal("ADMIN"), z.literal("USER_ADMIN")],
+    [z.literal("USER"), z.literal("ADMIN"), z.literal("SUPER_ADMIN")],
     {
       invalid_type_error: "Role must be one of: USER, ADMIN, USER_ADMIN",
     },
@@ -47,6 +47,13 @@ export const zodAdminCreateUser = zodUsers.pick({
   name: true,
   password: true,
   role: true,
+})
+
+export const zodAdminUpdateUser = zodUsers.pick({
+  email: true,
+  name: true,
+  role: true,
+  isActive: true,
 })
 
 export type UsersTypeAPI = z.infer<typeof zodUsers>
