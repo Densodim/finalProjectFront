@@ -1,14 +1,19 @@
-import { Box, Button, Link } from "@mui/material"
+import { Box, Button, LinearProgress, Link } from "@mui/material"
 import { translations } from "./lib/translations.ts"
 import WrapperBox from "./components/WrapperBox.tsx"
 import { useFormik } from "formik"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
-import { loginAsync, selectError, selectLanguage } from "./authSlice.ts"
+import {
+  loginAsync,
+  selectError,
+  selectLanguage,
+  selectStatus,
+} from "./authSlice.ts"
 import HeaderForm from "./components/HeaderForm.tsx"
 import WrapperTextField from "./components/WrapperTextField.tsx"
 import { useNavigate } from "react-router"
 import { enqueueSnackbar } from "notistack"
-import { zodUsers } from "../admin/lib/zodUsers.ts"
+import { zodSingIn } from "./lib/zodLogin.ts"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
 export default function SignInPage() {
@@ -18,9 +23,10 @@ export default function SignInPage() {
   const dispatch = useAppDispatch()
   const error = useAppSelector(selectError)
   const navigate = useNavigate()
+  const isLoading = useAppSelector(selectStatus)
 
   const formikLogin = useFormik({
-    validationSchema:toFormikValidationSchema(zodUsers),
+    validationSchema: toFormikValidationSchema(zodSingIn),
     initialValues: {
       email: "",
       password: "",
@@ -37,6 +43,14 @@ export default function SignInPage() {
 
   const handleNavigateRegister = async () => {
     await navigate("/register")
+  }
+
+  if (isLoading === "loading") {
+    return (
+      <div style={{ width: "100%" }}>
+        <LinearProgress />
+      </div>
+    )
   }
 
   return (
@@ -69,6 +83,7 @@ export default function SignInPage() {
         </Button>
         <Link
           component={"button"}
+          type="submit"
           variant={"body2"}
           onClick={handleNavigateRegister}
         >

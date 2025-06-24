@@ -14,14 +14,14 @@ import {
 import { useNavigate } from "react-router"
 import type { UserRole } from "../../../../api/auth/authAPI"
 import { toFormikValidationSchema } from "zod-formik-adapter"
-import { zodUsers } from "../../lib/zodUsers.ts"
+import { zodAdminCreateUser } from "../../lib/zodUsers.ts"
 
 export default function CreateUserPage() {
   const dispatch = useAppDispatch()
   const navitate = useNavigate()
 
   const formik = useFormik<formikProps>({
-    validationSchema: toFormikValidationSchema(zodUsers),
+    validationSchema: toFormikValidationSchema(zodAdminCreateUser),
     initialValues: {
       email: "",
       password: "",

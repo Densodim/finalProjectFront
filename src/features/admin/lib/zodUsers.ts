@@ -42,4 +42,11 @@ export const zodUsers = z.object({
   }),
 })
 
+export const zodAdminCreateUser = zodUsers.pick({
+  email: true,
+  name: true,
+  password: true,
+  role: true,
+})
+
 export type UsersTypeAPI = z.infer<typeof zodUsers>
