@@ -1,3 +1,4 @@
+import type { UserRole } from "../auth/authAPI.ts"
 import { instance } from "../instance.ts"
 
 export const adminApi = {
@@ -25,4 +26,30 @@ export const adminApi = {
     })
     return promise
   },
+  updateUser({ id, token, name, email, role, isActive }: updateUserProps) {
+    const promise = instance.patch(
+      `users/${id}`,
+      {
+        name,
+        email,
+        role,
+        isActive,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    return promise
+  },
+}
+//types
+export type updateUserProps = {
+  token: string
+  id: number
+  email: string
+  name: string
+  role: UserRole
+  isActive: boolean
 }

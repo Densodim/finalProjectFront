@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks.ts"
-import { deleteUserThunk, fetchAllUsers } from "../../adminSlice.ts"
+import { deleteUserThunk, fetchAllUsersThunk } from "../../adminSlice.ts"
 import { useEffect, useState } from "react"
 import { selectToken } from "../../../login/authSlice.ts"
 import { Button, ButtonGroup, Paper } from "@mui/material"
@@ -27,7 +27,7 @@ export default function AllUsersPage() {
 
   useEffect(() => {
     if (token != null) {
-      dispatch(fetchAllUsers(token))
+      dispatch(fetchAllUsersThunk(token))
     }
   }, [token])
 
@@ -41,7 +41,7 @@ export default function AllUsersPage() {
       )
     }
     if (token) {
-      dispatch(fetchAllUsers(token))
+      dispatch(fetchAllUsersThunk(token))
     }
     setSelectedRows(undefined)
   }

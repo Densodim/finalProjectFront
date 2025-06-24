@@ -2,16 +2,19 @@ import type { UsersTypeAPI } from "./lib/zodUsers.ts"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { RejectedPayload } from "../login/authSlice.ts"
+import type { updateUserProps } from "../../api/admin/admin-api.tsx";
 import { adminApi } from "../../api/admin/admin-api.tsx"
+import { handleThunkError } from "../../utils/handleThunkError.ts"
 
 const initialState: AdminSliceType = {
   users: [],
+  user: null,
   status: "idle",
   error: "",
   message: "",
 }
 
-export const fetchAllUsers = createAsyncThunk<
+export const fetchAllUsersThunk = createAsyncThunk<
   UsersTypeAPI[],
   string,
   { rejectValue: RejectedPayload }
@@ -20,32 +23,58 @@ export const fetchAllUsers = createAsyncThunk<
     const response = await adminApi.getUsers(token)
     return response.data
   } catch (e: any) {
-    const message = e.payload?.message || "Error"
-    return rejectWithValue({
-      message,
-      error: "",
-      statusCode: 0,
-    })
+    return rejectWithValue(handleThunkError(e))
+  }
+})
+
+export const fetchUserByIdThunk = createAsyncThunk<
+  UsersTypeAPI,
+  argUserType,
+  { rejectValue: RejectedPayload }
+>("admin/fetchUserById", async ({ token, id }, { rejectWithValue }) => {
+  try {
+    const response = await adminApi.getUser(token, id)
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
   }
 })
 
 export const deleteUserThunk = createAsyncThunk<
   UsersTypeAPI,
-  argDeleteType,
+  argUserType,
   { rejectValue: RejectedPayload }
 >("admin/deleteUserThunk", async ({ token, id }, { rejectWithValue }) => {
   try {
     const response = await adminApi.deleteUser(token, id)
     return response.data
   } catch (e: any) {
-    const message = e.payload?.message || "Error"
-    return rejectWithValue({
-      message,
-      error: "",
-      statusCode: 0,
-    })
+    return rejectWithValue(handleThunkError(e))
   }
 })
+
+export const updateUserThunk = createAsyncThunk<
+  UsersTypeAPI,
+  updateUserProps,
+  { rejectValue: RejectedPayload }
+>(
+  "admin/updateUserThunk",
+  async ({ token, id, role, name, email, isActive }, { rejectWithValue }) => {
+    try {
+      const response = await adminApi.updateUser({
+        id,
+        token,
+        name,
+        email,
+        role,
+        isActive,
+      })
+      return response.data
+    } catch (e: any) {
+      return rejectWithValue(handleThunkError(e))
+    }
+  },
+)
 
 export const adminSlice = createSlice({
   name: "admin",
@@ -53,18 +82,18 @@ export const adminSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchAllUsers.pending, state => {
+      .addCase(fetchAllUsersThunk.pending, state => {
         state.status = "loading"
       })
       .addCase(
-        fetchAllUsers.fulfilled,
+        fetchAllUsersThunk.fulfilled,
         (state, action: PayloadAction<UsersTypeAPI[]>) => {
           state.status = "idle"
           state.users = action.payload
         },
       )
       .addCase(
-        fetchAllUsers.rejected,
+        fetchAllUsersThunk.rejected,
         (state, action: PayloadAction<RejectedPayload | undefined>) => {
           state.status = "failed"
           state.error = action.payload?.message
@@ -84,24 +113,64 @@ export const adminSlice = createSlice({
           state.error = action.payload?.message
         },
       )
+      .addCase(fetchUserByIdThunk.pending, state => {
+        state.status = "loading"
+      })
+      .addCase(
+        fetchUserByIdThunk.fulfilled,
+        (state, action: PayloadAction<UsersTypeAPI>) => {
+          state.status = "idle"
+          state.user = action.payload
+        },
+      )
+      .addCase(
+        fetchUserByIdThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(updateUserThunk.pending, state => {
+        state.status = "loading"
+      })
+      .addCase(
+        updateUserThunk.fulfilled,
+        (state, action: PayloadAction<UsersTypeAPI>) => {
+          state.status = "idle"
+          state.user = action.payload
+          state.message = "Update successfully."
+        },
+      )
+      .addCase(
+        updateUserThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
   },
   selectors: {
     selectAllUsers: state => state.users,
+    selectUser: state => state.user,
+    selectStatusAdmin: state => state.status,
+    selectMessageAdmin: state => state.message,
   },
 })
 
-export const { selectAllUsers } = adminSlice.selectors
+export const { selectAllUsers, selectUser, selectStatusAdmin, selectMessageAdmin } =
+  adminSlice.selectors
 
 //types
 
 type AdminSliceType = {
   users: UsersTypeAPI[] | null
+  user: UsersTypeAPI | null
   status: "idle" | "loading" | "failed"
   error: string | undefined
   message: string
 }
 
-type argDeleteType = {
+type argUserType = {
   token: string
   id: number
 }
