@@ -13,39 +13,15 @@ import {
 } from "@mui/material"
 import { useNavigate } from "react-router"
 import type { UserRole } from "../../../../api/auth/authAPI"
+import { toFormikValidationSchema } from "zod-formik-adapter"
+import { zodUsers } from "../../lib/zodUsers.ts"
 
 export default function CreateUserPage() {
   const dispatch = useAppDispatch()
   const navitate = useNavigate()
 
   const formik = useFormik<formikProps>({
-    validate: values => {
-      if (!values.name) {
-        return {
-          name: "Name is required",
-        }
-      }
-      if (!values.email) {
-        return {
-          email: "Email is required",
-        }
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      ) {
-        return {
-          email: "Invalid email address",
-        }
-      }
-      if (!values.password) {
-        return {
-          password: "Password is required",
-        }
-      } else if (values.password.length < 6) {
-        return {
-          password: "The minimum foam length should be 6",
-        }
-      }
-    },
+    validationSchema: toFormikValidationSchema(zodUsers),
     initialValues: {
       email: "",
       password: "",

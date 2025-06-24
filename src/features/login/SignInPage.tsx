@@ -8,6 +8,8 @@ import HeaderForm from "./components/HeaderForm.tsx"
 import WrapperTextField from "./components/WrapperTextField.tsx"
 import { useNavigate } from "react-router"
 import { enqueueSnackbar } from "notistack"
+import { zodUsers } from "../admin/lib/zodUsers.ts"
+import { toFormikValidationSchema } from "zod-formik-adapter"
 
 export default function SignInPage() {
   const currentLanguage = useAppSelector(selectLanguage)
@@ -18,28 +20,7 @@ export default function SignInPage() {
   const navigate = useNavigate()
 
   const formikLogin = useFormik({
-    validate: values => {
-      if (!values.email) {
-        return {
-          email: "Email is required",
-        }
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      ) {
-        return {
-          email: "Invalid email address",
-        }
-      }
-      if (!values.password) {
-        return {
-          password: "Password is required",
-        }
-      } else if (values.password.length < 6) {
-        return {
-          password: "The minimum foam length should be 6 chapters",
-        }
-      }
-    },
+    validationSchema:toFormikValidationSchema(zodUsers),
     initialValues: {
       email: "",
       password: "",
