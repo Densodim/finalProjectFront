@@ -10,8 +10,8 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { useNavigate } from "react-router"
 import useRowsUsers from "../../hooks/useRowsUsers.ts"
 import useColumsUsers from "../../hooks/useColumsUsers.tsx"
+import { paginationModel } from "../../../../utils/CONST.ts"
 
-const paginationModel = { page: 0, pageSize: 5 }
 
 export default function AllUsersPage() {
   const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>()

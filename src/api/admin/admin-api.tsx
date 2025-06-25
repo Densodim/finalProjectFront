@@ -43,6 +43,14 @@ export const adminApi = {
     )
     return promise
   },
+  getForms(token: string) {
+    const promise = instance.get('form', {
+      headers:{
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    return promise
+  }
 }
 //types
 export type updateUserProps = {
