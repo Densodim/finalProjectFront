@@ -132,6 +132,7 @@ export const adminSlice = createSlice({
       )
       .addCase(updateUserThunk.pending, state => {
         state.status = "loading"
+        state.message = 'Loading ...'
       })
       .addCase(
         updateUserThunk.fulfilled,
@@ -146,6 +147,7 @@ export const adminSlice = createSlice({
         (state, action: PayloadAction<RejectedPayload | undefined>) => {
           state.status = "failed"
           state.error = action.payload?.message
+          state.message = 'Error update'
         },
       )
   },

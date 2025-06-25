@@ -1,4 +1,4 @@
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { useFormik } from "formik"
 import { zodAdminUpdateUser } from "../../lib/zodUsers.ts"
 import { toFormikValidationSchema } from "zod-formik-adapter"
@@ -30,12 +30,13 @@ import { selectToken } from "../../../login/authSlice.ts"
 
 export default function EditUserPage() {
   const param = useParams()
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const token = useAppSelector(selectToken)
   const selectedUser = useAppSelector(selectUser)
   const status = useAppSelector(selectStatusAdmin)
   const message = useAppSelector(selectMessageAdmin)
-  // console.log("selectedUser", selectedUser)
+  console.log("selectedUser", selectedUser)
 
   useEffect(() => {
     if (param.id) {
@@ -63,8 +64,9 @@ export default function EditUserPage() {
             isActive: values.isActive,
           }),
         )
+        navigate('/admin/allUsers')
       }
-      console.log(values)
+      // console.log(values)
     },
   })
 
@@ -111,10 +113,11 @@ export default function EditUserPage() {
           <RadioGroup
             row
             name="isActive"
-            value={formik.values.isActive ? "true" : "false"}
+            value={formik.values.isActive ? "true" : ""}
+            onChange={e=> formik.setFieldValue("isActive", e.target.value === 'true')}
           >
             <FormControlLabel control={<Radio />} label="Active" value="true" />
-            <FormControlLabel control={<Radio />} label="Block" value="false" />
+            <FormControlLabel control={<Radio />} label="Block" value="" />
           </RadioGroup>
         </FormControl>
         <FormControl fullWidth>
