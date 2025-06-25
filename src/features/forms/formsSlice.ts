@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { FormTypeAPI } from "./lib/zodForms.ts"
 import { adminApi } from "../../api/admin/admin-api.tsx"
 import { handleThunkError } from "../../utils/handleThunkError.ts"

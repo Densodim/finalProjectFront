@@ -35,3 +35,8 @@ const zodForms = z.object({
 })
 
 export type FormTypeAPI = z.infer<typeof zodForms>
+export const zodCreateForm = zodForms.pick({
+  title: true,
+  description: true,
+  categoryId: true,
+})

@@ -1,0 +1,62 @@
+import { Button, ButtonGroup, Paper } from "@mui/material"
+import AddIcon from "@mui/icons-material/Add"
+import DeleteIcon from "@mui/icons-material/Delete"
+import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts"
+import { selectToken } from "../../login/authSlice.ts"
+import { useEffect } from "react"
+import { getAllFormsThunk} from "../formsSlice.ts"
+import { paginationModel } from "../../../utils/CONST.ts"
+import { DataGrid } from "@mui/x-data-grid"
+import useRowsForms from "../hooks/useRowsForms.ts"
+import useColumsForms from "../hooks/useColumsForms.tsx"
+import { useNavigate } from "react-router"
+
+export default function AllFormsPage() {
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const token = useAppSelector(selectToken)
+  const rows = useRowsForms()
+  const columns = useColumsForms()
+
+
+  useEffect(() => {
+    dispatch(getAllFormsThunk(token))
+  }, [token])
+
+  const handleDeleteForm = () => {
+    console.log("delete")
+  }
+  const handleCreateForm = () => {
+    navigate("/forms/createForm")
+  }
+  return (
+    <>
+      <ButtonGroup variant="outlined" aria-label="Loading button group">
+        <Button startIcon={<AddIcon />} onClick={handleCreateForm}>
+          Create Form
+        </Button>
+        <Button
+          startIcon={<DeleteIcon />}
+          color="error"
+          onClick={handleDeleteForm}
+          // disabled={!selectedRows?.ids}
+        >
+          Delete
+        </Button>
+      </ButtonGroup>
+
+      <Paper sx={{ height: "100%", width: "100%" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+          sx={{ border: 0 }}
+          // onRowSelectionModelChange={prevSelect => setSelectedRows(prevSelect)}
+          // rowSelectionModel={selectedRows}
+        />
+      </Paper>
+    </>
+  )
+}

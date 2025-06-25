@@ -1,15 +1,24 @@
-import { Link } from "@mui/material"
+import { Button, Stack } from "@mui/material"
 import type { MouseEventHandler } from "react"
 
-export default function ButtonLink({ value, onClick }: ButtonLinkProps) {
+export default function ButtonLink({ handleReturn }: ButtonProps) {
   return (
-    <Link component="button" variant="body2" onClick={onClick}>
-      {value}
-    </Link>
+    <Stack spacing={2} direction={"row"} margin={2}>
+      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+        {"Submit"}
+      </Button>
+      <Button
+        type="submit"
+        variant="outlined"
+        color="primary"
+        onClick={handleReturn}
+      >
+        {"Cancel"}
+      </Button>
+    </Stack>
   )
 }
 
-type ButtonLinkProps = {
-  value: string
-  onClick?: MouseEventHandler<HTMLButtonElement>
+type ButtonProps = {
+  handleReturn?: MouseEventHandler<HTMLButtonElement>
 }

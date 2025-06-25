@@ -1,50 +1,48 @@
 import { Button, ButtonGroup, Paper } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks.ts"
-import { selectToken } from "../../../login/authSlice.ts"
-import { useEffect } from "react"
-import { getAllFormsThunk, selectAllForms } from "../../../forms/formsSlice.ts"
-import { paginationModel } from "../../../../utils/CONST.ts"
+import useRowsCategories from "./hooks/useRowsCategories.ts"
+import { useColumsCategories } from "./hooks/useColumsCategories.tsx"
+import { paginationModel } from "../../utils/CONST.ts"
 import { DataGrid } from "@mui/x-data-grid"
-import useRowsForms from "../../../forms/hooks/useRowsForms.ts"
-import useColumsForms from "../../../forms/hooks/useColumsForms.tsx"
+import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
+import { useEffect } from "react"
+import { selectToken } from "../login/authSlice.ts"
+import { getAllCategoriesThunk } from "./categoriesSlice.ts"
 
-export default function AllFormsPage() {
+export default function CategoriesPage() {
+  const rows = useRowsCategories()
+  const columns = useColumsCategories()
   const dispatch = useAppDispatch()
   const token = useAppSelector(selectToken)
-  const forms = useAppSelector(selectAllForms)
-  const rows = useRowsForms()
-  const columns = useColumsForms()
-  console.log(forms)
 
   useEffect(() => {
-    dispatch(getAllFormsThunk(token))
+    dispatch(getAllCategoriesThunk(token))
   }, [token])
 
-  const handleDeleteForm = () => {
-    console.log("delete")
+  const handleCreateCategory = () => {
+    console.log("create category")
   }
-  const handleCreateForm = () => {
-    console.log("Create Form")
+  const handleDeleteCategory = () => {
+    console.log("delete Category")
   }
   return (
     <>
       <ButtonGroup variant="outlined" aria-label="Loading button group">
-        <Button startIcon={<AddIcon />} onClick={handleCreateForm}>
+        <Button startIcon={<AddIcon />} onClick={handleCreateCategory}>
           Create Form
         </Button>
         <Button
           startIcon={<DeleteIcon />}
           color="error"
-          onClick={handleDeleteForm}
+          onClick={handleDeleteCategory}
           // disabled={!selectedRows?.ids}
         >
           Delete
         </Button>
       </ButtonGroup>
 
-      <Paper sx={{ height: "100%", width: "100%" }}>
+      <Paper sx={{ height: "100%", width: "80%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
