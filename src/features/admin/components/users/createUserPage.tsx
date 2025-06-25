@@ -2,19 +2,12 @@ import WrapperTextField from "../../../login/components/WrapperTextField.tsx"
 import { useFormik } from "formik"
 import { registerAsync } from "../../../login/authSlice.ts"
 import { useAppDispatch } from "../../../../app/hooks.ts"
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  MenuItem,
-  Select,
-  Stack,
-} from "@mui/material"
+import { Box, FormControl, FormLabel, MenuItem, Select } from "@mui/material"
 import { useNavigate } from "react-router"
 import type { UserRole } from "../../../../api/auth/authAPI"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 import { zodAdminCreateUser } from "../../lib/zodUsers.ts"
+import ButtonLink from "../../../../utils/ButtonLink.tsx"
 
 export default function CreateUserPage() {
   const dispatch = useAppDispatch()
@@ -79,24 +72,7 @@ export default function CreateUserPage() {
             <MenuItem value="SUPER_ADMIN">Super Admin</MenuItem>
           </Select>
         </FormControl>
-        <Stack spacing={2} direction={"row"} margin={2}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-          >
-            {"Submit"}
-          </Button>
-          <Button
-            type="submit"
-            variant="outlined"
-            color="primary"
-            onClick={handleReturn}
-          >
-            {"Cancel"}
-          </Button>
-        </Stack>
+        <ButtonLink handleReturn={handleReturn} />
       </Box>
     </>
   )

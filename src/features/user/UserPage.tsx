@@ -1,5 +1,5 @@
-import Typography from '@mui/material/Typography';
+import { Outlet } from "react-router"
 
 export default function UserPage() {
-  return <Typography>Welcome to Toolpad!</Typography>;
+  return <Outlet />
 }

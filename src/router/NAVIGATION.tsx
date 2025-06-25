@@ -3,7 +3,8 @@ import DashboardIcon from "@mui/icons-material/Dashboard"
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"
 import GroupIcon from "@mui/icons-material/Group"
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter"
-
+import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered"
+import CategoryIcon from "@mui/icons-material/Category"
 
 export const NAVIGATION: Navigation = [
   {
@@ -23,6 +24,16 @@ export const NAVIGATION: Navigation = [
         segment: "allUsers",
         title: "All Users",
         icon: <GroupIcon />,
+      },
+      {
+        segment: "allForms",
+        title: "All Forms",
+        icon: <FormatListNumberedIcon />,
+      },
+      {
+        segment: "categories",
+        title: "Categories",
+        icon: <CategoryIcon />,
       },
     ],
   },

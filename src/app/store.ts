@@ -11,8 +11,10 @@ import {
 } from "redux-persist"
 import { authSlice } from "../features/login/authSlice.ts"
 import { adminSlice } from "../features/admin/adminSlice.ts"
+import { formsSlice } from "../features/forms/formsSlice.ts"
+import { categoriesSlice } from "../features/categories/categoriesSlice.ts"
 
-const rootReducer = combineSlices(authSlice, adminSlice)
+const rootReducer = combineSlices(authSlice, adminSlice, formsSlice, categoriesSlice)
 
 export type RootState = ReturnType<typeof rootReducer>
 

@@ -10,6 +10,9 @@ import FormPage from "../features/forms/FormsPage.tsx"
 import AllUsersPage from "../features/admin/components/users/AllUsersPage.tsx"
 import CreateUserPage from "../features/admin/components/users/createUserPage.tsx"
 import EditUserPage from "../features/admin/components/users/editUserPage.tsx"
+import AllFormsPage from "../features/forms/components/AllFormsPage.tsx"
+import CreateFormPage from "../features/forms/components/createFormPage.tsx"
+import CategoriesPage from "../features/categories/CategoriesPage.tsx"
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +29,12 @@ export const router = createBrowserRouter([
               {
                 path: "/forms",
                 Component: FormPage,
+                children: [
+                  {
+                    path: "createForm",
+                    Component: CreateFormPage,
+                  },
+                ],
               },
             ],
           },
@@ -44,6 +53,14 @@ export const router = createBrowserRouter([
               {
                 path: `editUser/:id`,
                 Component: EditUserPage,
+              },
+              {
+                path: "allForms",
+                Component: AllFormsPage,
+              },
+              {
+                path: "categories",
+                Component: CategoriesPage,
               },
             ],
           },
