@@ -4,11 +4,12 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import useRowsCategories from "./hooks/useRowsCategories.ts"
 import { useColumsCategories } from "./hooks/useColumsCategories.tsx"
 import { paginationModel } from "../../utils/CONST.ts"
-import { DataGrid } from "@mui/x-data-grid"
+import { DataGrid, type GridRowSelectionModel } from "@mui/x-data-grid"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
 import { useEffect, useState } from "react"
 import { selectToken } from "../login/authSlice.ts"
 import {
+  deleteCategoryThunk,
   getAllCategoriesThunk,
   selectStatusCategories,
 } from "./categoriesSlice.ts"
@@ -16,6 +17,8 @@ import CreateCategories from "./components/createCategory.tsx"
 
 export default function CategoriesPage() {
   const [createCategory, setCreateCategory] = useState<boolean>(false)
+  const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>()
+  const gridRowId = selectedRows?.ids ? Array.from(selectedRows?.ids) : []
 
   const rows = useRowsCategories()
   const columns = useColumsCategories()
@@ -30,9 +33,16 @@ export default function CategoriesPage() {
   const handleCreateCategory = () => {
     setCreateCategory(prevState => !prevState)
   }
-  const handleDeleteCategory = () => {
-    console.log("delete Category")
+  const handleDeleteCategory = async () => {
+    for (const id of gridRowId) {
+      await dispatch(deleteCategoryThunk({ id: Number(id), token }))
+    }
+    if (token) {
+      dispatch(getAllCategoriesThunk(token))
+    }
+    setSelectedRows(undefined)
   }
+
   if (status === "loading") {
     return (
       <div style={{ width: "100%" }}>
@@ -52,7 +62,7 @@ export default function CategoriesPage() {
           startIcon={<DeleteIcon />}
           color="error"
           onClick={handleDeleteCategory}
-          // disabled={!selectedRows?.ids}
+          disabled={!selectedRows?.ids && selectedRows === undefined}
         >
           Delete
         </Button>
@@ -66,8 +76,8 @@ export default function CategoriesPage() {
           pageSizeOptions={[5, 10]}
           checkboxSelection
           sx={{ border: 0 }}
-          // onRowSelectionModelChange={prevSelect => setSelectedRows(prevSelect)}
-          // rowSelectionModel={selectedRows}
+          onRowSelectionModelChange={prevSelect => setSelectedRows(prevSelect)}
+          rowSelectionModel={selectedRows}
         />
       </Paper>
     </>

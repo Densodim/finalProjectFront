@@ -3,7 +3,10 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { RejectedType } from "../admin/adminSlice.ts"
 import { handleThunkError } from "../../utils/handleThunkError.ts"
-import type { createCategoryProps } from "../../api/caterogy/categoryApi.ts"
+import type {
+  createCategoryProps,
+  DeleteCategoryProps,
+} from "../../api/caterogy/categoryApi.ts"
 import { categoryApi } from "../../api/caterogy/categoryApi.ts"
 import type { RejectedPayload } from "../login/authSlice.ts"
 
@@ -48,6 +51,19 @@ export const createCategoryThunk = createAsyncThunk<
   },
 )
 
+export const deleteCategoryThunk = createAsyncThunk<
+  CategoryTypeAPI,
+  DeleteCategoryProps,
+  RejectedType
+>("category/deleteCategory", async ({ token, id }, { rejectWithValue }) => {
+  try {
+    const response = await categoryApi.deleteCategory({ token, id })
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
+
 export const categoriesSlice = createSlice({
   name: "categories",
   initialState,
@@ -87,6 +103,21 @@ export const categoriesSlice = createSlice({
       )
       .addCase(
         createCategoryThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(deleteCategoryThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(deleteCategoryThunk.fulfilled, state => {
+        state.status = "idle"
+        state.message = ""
+      })
+      .addCase(
+        deleteCategoryThunk.rejected,
         (state, action: PayloadAction<RejectedPayload | undefined>) => {
           state.status = "failed"
           state.error = action.payload?.message

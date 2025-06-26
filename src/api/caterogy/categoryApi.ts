@@ -20,6 +20,12 @@ export const categoryApi = {
     )
     return promise
   },
+  deleteCategory({ token, id }: DeleteCategoryProps) {
+    const promise = instance.delete(`categories/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    return promise
+  },
 }
 
 //types
@@ -27,4 +33,8 @@ export type createCategoryProps = {
   token: string
   name: string
   description: string
+}
+export type DeleteCategoryProps = {
+  token: string
+  id: number
 }

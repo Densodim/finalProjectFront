@@ -22,7 +22,6 @@ import CreateFormPage from "./createFormPage.tsx"
 export default function AllFormsPage() {
   const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>()
   const gridRowId = selectedRows?.ids ? Array.from(selectedRows?.ids) : []
-  console.log(gridRowId)
 
   const [createForm, setCreateForm] = useState<boolean>(false)
   const dispatch = useAppDispatch()
@@ -68,7 +67,7 @@ export default function AllFormsPage() {
           startIcon={<DeleteIcon />}
           color="error"
           onClick={handleDeleteForm}
-          // disabled={!selectedRows?.ids}
+          disabled={!selectedRows?.ids && selectedRows === undefined}
         >
           Delete
         </Button>
