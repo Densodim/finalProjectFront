@@ -29,7 +29,6 @@ export default function CategoriesPage() {
 
   const handleCreateCategory = () => {
     setCreateCategory(prevState => !prevState)
-    dispatch(getAllCategoriesThunk(token))
   }
   const handleDeleteCategory = () => {
     console.log("delete Category")

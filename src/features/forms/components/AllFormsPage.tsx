@@ -1,36 +1,50 @@
-import { Button, ButtonGroup, Paper } from "@mui/material"
+import { Button, ButtonGroup, LinearProgress, Paper } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts"
 import { selectToken } from "../../login/authSlice.ts"
-import { useEffect } from "react"
-import { getAllFormsThunk} from "../formsSlice.ts"
+import { useEffect, useState } from "react"
+import { getAllFormsThunk } from "../formsSlice.ts"
 import { paginationModel } from "../../../utils/CONST.ts"
 import { DataGrid } from "@mui/x-data-grid"
 import useRowsForms from "../hooks/useRowsForms.ts"
 import useColumsForms from "../hooks/useColumsForms.tsx"
-import { useNavigate } from "react-router"
+import {
+  getAllCategoriesThunk,
+  selectStatusCategories,
+} from "../../categories/categoriesSlice.ts"
+import CreateFormPage from "./createFormPage.tsx"
 
 export default function AllFormsPage() {
-  const navigate = useNavigate()
+  const [createForm, setCreateForm] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const token = useAppSelector(selectToken)
   const rows = useRowsForms()
   const columns = useColumsForms()
-
+  const status = useAppSelector(selectStatusCategories)
 
   useEffect(() => {
     dispatch(getAllFormsThunk(token))
+    dispatch(getAllCategoriesThunk(token))
   }, [token])
 
   const handleDeleteForm = () => {
     console.log("delete")
   }
   const handleCreateForm = () => {
-    navigate("/forms/createForm")
+    setCreateForm(prevState => !prevState)
+  }
+
+  if (status === "loading") {
+    return (
+      <div style={{ width: "100%" }}>
+        <LinearProgress />
+      </div>
+    )
   }
   return (
     <>
+      <CreateFormPage open={createForm} setOpen={setCreateForm} />
       <ButtonGroup variant="outlined" aria-label="Loading button group">
         <Button startIcon={<AddIcon />} onClick={handleCreateForm}>
           Create Form
