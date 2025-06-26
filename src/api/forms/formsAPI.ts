@@ -13,6 +13,12 @@ export const formsAPI = {
     )
     return promise
   },
+  deleteForm({id, token}:DeleteFormType) {
+    const promise = instance.delete(`form/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    return promise
+  },
 }
 //types
 export type CreateFormType = {
@@ -20,4 +26,8 @@ export type CreateFormType = {
   title: string
   description: string
   categoryId: number
+}
+export type DeleteFormType = {
+  token: string
+  id: number
 }

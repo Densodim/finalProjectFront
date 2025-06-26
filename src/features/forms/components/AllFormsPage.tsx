@@ -4,9 +4,13 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts"
 import { selectToken } from "../../login/authSlice.ts"
 import { useEffect, useState } from "react"
-import { getAllFormsThunk } from "../formsSlice.ts"
+import {
+  deleteFormThunk,
+  getAllFormsThunk,
+  selectStatusForm,
+} from "../formsSlice.ts"
 import { paginationModel } from "../../../utils/CONST.ts"
-import { DataGrid } from "@mui/x-data-grid"
+import { DataGrid, type GridRowSelectionModel } from "@mui/x-data-grid"
 import useRowsForms from "../hooks/useRowsForms.ts"
 import useColumsForms from "../hooks/useColumsForms.tsx"
 import {
@@ -16,26 +20,37 @@ import {
 import CreateFormPage from "./createFormPage.tsx"
 
 export default function AllFormsPage() {
+  const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>()
+  const gridRowId = selectedRows?.ids ? Array.from(selectedRows?.ids) : []
+  console.log(gridRowId)
+
   const [createForm, setCreateForm] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const token = useAppSelector(selectToken)
   const rows = useRowsForms()
   const columns = useColumsForms()
-  const status = useAppSelector(selectStatusCategories)
+  const statusCategory = useAppSelector(selectStatusCategories)
+  const statusForm = useAppSelector(selectStatusForm)
 
   useEffect(() => {
     dispatch(getAllFormsThunk(token))
     dispatch(getAllCategoriesThunk(token))
   }, [token])
 
-  const handleDeleteForm = () => {
-    console.log("delete")
+  const handleDeleteForm = async () => {
+    for (const id of gridRowId) {
+      await dispatch(deleteFormThunk({ token, id: Number(id) }))
+    }
+    if (token) {
+      await dispatch(getAllFormsThunk(token))
+    }
+    setSelectedRows(undefined)
   }
   const handleCreateForm = () => {
     setCreateForm(prevState => !prevState)
   }
 
-  if (status === "loading") {
+  if (statusCategory === "loading" || statusForm === "loading") {
     return (
       <div style={{ width: "100%" }}>
         <LinearProgress />
@@ -67,8 +82,8 @@ export default function AllFormsPage() {
           pageSizeOptions={[5, 10]}
           checkboxSelection
           sx={{ border: 0 }}
-          // onRowSelectionModelChange={prevSelect => setSelectedRows(prevSelect)}
-          // rowSelectionModel={selectedRows}
+          onRowSelectionModelChange={prevSelect => setSelectedRows(prevSelect)}
+          rowSelectionModel={selectedRows}
         />
       </Paper>
     </>

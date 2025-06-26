@@ -2,8 +2,8 @@ import type { UsersTypeAPI } from "./lib/zodUsers.ts"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { RejectedPayload } from "../login/authSlice.ts"
-import type { updateUserProps } from "../../api/admin/admin-api.tsx"
-import { adminApi } from "../../api/admin/admin-api.tsx"
+import type { updateUserProps } from "../../api/admin/adminAPI.tsx"
+import { adminAPI } from "../../api/admin/adminAPI.tsx"
 import { handleThunkError } from "../../utils/handleThunkError.ts"
 
 const initialState: AdminSliceType = {
@@ -20,7 +20,7 @@ export const fetchAllUsersThunk = createAsyncThunk<
   RejectedType
 >("admin/fetchUsers", async (token, { rejectWithValue }) => {
   try {
-    const response = await adminApi.getUsers(token)
+    const response = await adminAPI.getUsers(token)
     return response.data
   } catch (e: any) {
     return rejectWithValue(handleThunkError(e))
@@ -33,7 +33,7 @@ export const fetchUserByIdThunk = createAsyncThunk<
   RejectedType
 >("admin/fetchUserById", async ({ token, id }, { rejectWithValue }) => {
   try {
-    const response = await adminApi.getUser(token, id)
+    const response = await adminAPI.getUser(token, id)
     return response.data
   } catch (e: any) {
     return rejectWithValue(handleThunkError(e))
@@ -46,7 +46,7 @@ export const deleteUserThunk = createAsyncThunk<
   RejectedType
 >("admin/deleteUserThunk", async ({ token, id }, { rejectWithValue }) => {
   try {
-    const response = await adminApi.deleteUser(token, id)
+    const response = await adminAPI.deleteUser(token, id)
     return response.data
   } catch (e: any) {
     return rejectWithValue(handleThunkError(e))
@@ -61,7 +61,7 @@ export const updateUserThunk = createAsyncThunk<
   "admin/updateUserThunk",
   async ({ token, id, role, name, email, isActive }, { rejectWithValue }) => {
     try {
-      const response = await adminApi.updateUser({
+      const response = await adminAPI.updateUser({
         id,
         token,
         name,

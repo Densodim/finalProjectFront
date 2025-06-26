@@ -92,7 +92,7 @@ export default function CreateFormPage({ open, setOpen }: Props) {
               color="primary"
               sx={{ mt: 2 }}
             >
-              Add Category
+              Add Form
             </Button>
           </Box>
         </Modal>

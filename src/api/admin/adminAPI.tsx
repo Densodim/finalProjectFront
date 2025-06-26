@@ -1,7 +1,7 @@
 import type { UserRole } from "../auth/authAPI.ts"
 import { instance } from "../instance.ts"
 
-export const adminApi = {
+export const adminAPI = {
   getUsers(token: string) {
     const promise = instance.get("users", {
       headers: {
