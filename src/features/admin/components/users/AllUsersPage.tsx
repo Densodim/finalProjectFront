@@ -12,7 +12,6 @@ import useRowsUsers from "../../hooks/useRowsUsers.ts"
 import useColumsUsers from "../../hooks/useColumsUsers.tsx"
 import { paginationModel } from "../../../../utils/CONST.ts"
 
-
 export default function AllUsersPage() {
   const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>()
   const gridRowId = selectedRows?.ids ? Array.from(selectedRows?.ids) : []
@@ -53,17 +52,14 @@ export default function AllUsersPage() {
   return (
     <>
       <ButtonGroup variant="outlined" aria-label="Loading button group">
-        <Button
-          startIcon={<AddIcon />}
-          onClick={handleCreateUser}
-        >
+        <Button startIcon={<AddIcon />} onClick={handleCreateUser}>
           Create User
         </Button>
         <Button
           startIcon={<DeleteIcon />}
           color="error"
           onClick={handleDeleteUsers}
-          disabled={!selectedRows?.ids}
+          disabled={!selectedRows?.ids && selectedRows === undefined}
         >
           Delete
         </Button>
