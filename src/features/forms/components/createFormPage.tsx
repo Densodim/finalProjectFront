@@ -12,11 +12,15 @@ import { zodCreateForm } from "../lib/zodForms.ts"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 import WrapperTextField from "../../login/components/WrapperTextField.tsx"
 import { style } from "../../../utils/styleModal.ts"
-import { useAppSelector } from "../../../app/hooks.ts"
+import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts"
 import { selectCategories } from "../../categories/categoriesSlice.ts"
+import { createFormThunk, getAllFormsThunk } from "../formsSlice.ts"
+import { selectToken } from "../../login/authSlice.ts"
 
 export default function CreateFormPage({ open, setOpen }: Props) {
+  const dispatch = useAppDispatch()
   const categories = useAppSelector(selectCategories)
+  const token = useAppSelector(selectToken)
 
   const formik = useFormik({
     validationSchema: toFormikValidationSchema(zodCreateForm),
@@ -26,7 +30,16 @@ export default function CreateFormPage({ open, setOpen }: Props) {
       categoryId: "",
     },
     onSubmit: async values => {
-      console.log(values.categoryId)
+      await dispatch(
+        createFormThunk({
+          token,
+          title: values.title,
+          description: values.description,
+          categoryId: Number(values.categoryId),
+        }),
+      )
+      setOpen(false)
+      await dispatch(getAllFormsThunk(token))
     },
   })
 
