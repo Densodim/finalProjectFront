@@ -9,4 +9,22 @@ export const categoryApi = {
     })
     return promise
   },
+  createCategories({ token, name, description }: createCategoryProps) {
+    const promise = instance.post(
+      "categories",
+      {
+        name,
+        description,
+      },
+      { headers: { Authorization: `Bearer ${token}` } },
+    )
+    return promise
+  },
+}
+
+//types
+export type createCategoryProps = {
+  token: string
+  name: string
+  description: string
 }

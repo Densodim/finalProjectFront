@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { zodCategory } from "../../categories/lib/zodCategory.ts"
 
 export const zodLogin = z
   .object({
@@ -72,3 +73,7 @@ export const zodRegister = zodLogin.shape.user.pick({
   name: true,
 })
 export type LoginApiType = z.infer<typeof zodLogin>
+export const zodCreateCategory = zodCategory.pick({
+  name: true,
+  description: true,
+})
