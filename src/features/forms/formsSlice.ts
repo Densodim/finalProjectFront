@@ -5,11 +5,12 @@ import { adminAPI } from "../../api/admin/adminAPI.tsx"
 import { handleThunkError } from "../../utils/handleThunkError.ts"
 import type { RejectedType } from "../admin/adminSlice.ts"
 import type { RejectedPayload } from "../login/authSlice.ts"
-import {
+import type {
   CreateFormType,
   DeleteFormType,
-  formsAPI,
+  GetOneFormType,
 } from "../../api/forms/formsAPI.ts"
+import { formsAPI } from "../../api/forms/formsAPI.ts"
 
 const initialState: FormsSliceType = {
   form: null,
@@ -65,6 +66,19 @@ export const deleteFormThunk = createAsyncThunk<
   }
 })
 
+export const getOneFormThunk = createAsyncThunk<
+  FormTypeAPI,
+  GetOneFormType,
+  RejectedType
+>("forms/getForm", async ({ id, token }, { rejectWithValue }) => {
+  try {
+    const response = await formsAPI.getForm({ token, id })
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
+
 export const formsSlice = createSlice({
   name: "forms",
   initialState,
@@ -113,8 +127,23 @@ export const formsSlice = createSlice({
         state.status = "loading"
         state.message = "Loading ..."
       })
+      .addCase(deleteFormThunk.fulfilled, state => {
+        state.status = "idle"
+        state.message = ""
+      })
       .addCase(
-        deleteFormThunk.fulfilled,
+        deleteFormThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(getOneFormThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        getOneFormThunk.fulfilled,
         (state, action: PayloadAction<FormTypeAPI>) => {
           state.status = "idle"
           state.form = action.payload
@@ -122,7 +151,7 @@ export const formsSlice = createSlice({
         },
       )
       .addCase(
-        deleteFormThunk.rejected,
+        getOneFormThunk.rejected,
         (state, action: PayloadAction<RejectedPayload | undefined>) => {
           state.status = "failed"
           state.error = action.payload?.message
@@ -131,11 +160,13 @@ export const formsSlice = createSlice({
   },
   selectors: {
     selectAllForms: state => state.forms,
-    selectStatusForm: state => state.status
+    selectStatusForm: state => state.status,
+    selectOneForm: state => state.form,
   },
 })
 
-export const { selectAllForms, selectStatusForm } = formsSlice.selectors
+export const { selectAllForms, selectStatusForm, selectOneForm } =
+  formsSlice.selectors
 //types
 type FormsSliceType = {
   forms: FormTypeAPI[] | null

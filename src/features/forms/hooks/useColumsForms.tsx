@@ -62,8 +62,7 @@ export default function useColumsForms() {
         <IconButton
           color="primary"
           onClick={() => {
-            navigate(``)
-            console.log(params.id)
+            navigate(`/forms/viewForm/${params.id}`)
           }}
         >
           <PreviewIcon />

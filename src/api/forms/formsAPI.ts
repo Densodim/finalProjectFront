@@ -13,8 +13,14 @@ export const formsAPI = {
     )
     return promise
   },
-  deleteForm({id, token}:DeleteFormType) {
+  deleteForm({ id, token }: DeleteFormType) {
     const promise = instance.delete(`form/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    return promise
+  },
+  getForm({ token, id }: GetOneFormType) {
+    const promise = instance.get(`form/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     return promise
@@ -31,3 +37,4 @@ export type DeleteFormType = {
   token: string
   id: number
 }
+export type GetOneFormType = DeleteFormType
