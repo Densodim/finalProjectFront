@@ -43,8 +43,7 @@ export default function useColumsForms() {
         <IconButton
           color="primary"
           onClick={() => {
-            navigate(``)
-            console.log(params.id)
+            navigate(`/forms/createForm/${params.id}`)
           }}
         >
           <EditIcon />

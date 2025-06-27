@@ -12,8 +12,8 @@ import CreateUserPage from "../features/admin/components/users/createUserPage.ts
 import EditUserPage from "../features/admin/components/users/editUserPage.tsx"
 import AllFormsPage from "../features/forms/components/AllFormsPage.tsx"
 import CategoriesPage from "../features/categories/CategoriesPage.tsx"
-import SurveyComponent from "../features/user/SurveyComponent.tsx"
-import { SurveyCreatorWidget } from "../features/user/SurveyCreator.tsx"
+import SurveyComponent from "../features/survey/SurveyComponent.tsx"
+import { SurveyCreatorWidget } from "../features/survey/SurveyCreator.tsx"
 
 
 export const router = createBrowserRouter([
@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
             Component: FormPage,
             children: [
               {
-                path: 'createForm',
+                path: 'createForm/:id',
                 Component: SurveyCreatorWidget
               },
               {

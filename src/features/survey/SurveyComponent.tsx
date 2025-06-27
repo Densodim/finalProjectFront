@@ -6,38 +6,37 @@ import { useNavigate, useParams } from "react-router"
 import ButtonLink from "../../utils/ButtonLink.tsx"
 import { getOneFormThunk, selectOneForm } from "../forms/formsSlice.ts"
 
-const surveyJson = {
-  description: "DesriptionTest",
-  title: "TitleTedst",
-  pages: [
-    {
-      description: "PageTest",
-      name: "page1",
-      title: "PageTest",
-      elements: [
-        {
-          name: "question1",
-          title: "Q1111",
-          type: "text",
-        },
-      ],
-    },
-  ],
-}
-
 export default function SurveyComponent() {
   const token = useAppSelector(selectToken)
   const navigate = useNavigate()
   const param = useParams()
   const dispatch = useAppDispatch()
   const form = useAppSelector(selectOneForm)
-  console.log(form)
 
   useEffect(() => {
     if (param.id) {
       dispatch(getOneFormThunk({ id: Number(param.id), token }))
     }
   }, [param])
+
+  const surveyJson = {
+    description: form?.description,
+    title: form?.title,
+    pages: [
+      {
+        description: "PageTest",
+        name: "page1",
+        title: "PageTest",
+        elements: [
+          {
+            name: "question1",
+            title: "Q1111",
+            type: "text",
+          },
+        ],
+      },
+    ],
+  }
 
   const survey = new Model(surveyJson)
 

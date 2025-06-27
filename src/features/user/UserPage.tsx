@@ -1,5 +1,5 @@
 import { Outlet } from "react-router"
-import SurveyComponent from "./SurveyComponent.tsx"
+import SurveyComponent from "../survey/SurveyComponent.tsx"
 
 export default function UserPage() {
   return (
