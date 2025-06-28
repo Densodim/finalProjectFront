@@ -6,6 +6,10 @@ import { useNavigate, useParams } from "react-router"
 import ButtonLink from "../../utils/ButtonLink.tsx"
 import { getOneFormThunk, selectOneForm } from "../forms/formsSlice.ts"
 import useSurveyJson from "./hooks/useSurveyJson.ts"
+import {
+  getQuestionsThunk,
+  selectQuestions,
+} from "../questions/questionsSlice.ts"
 
 export default function SurveyComponent() {
   const token = useAppSelector(selectToken)
@@ -13,14 +17,22 @@ export default function SurveyComponent() {
   const param = useParams()
   const dispatch = useAppDispatch()
   const form = useAppSelector(selectOneForm)
+  const questions = useAppSelector(selectQuestions)
+
 
   useEffect(() => {
     if (param.id) {
       dispatch(getOneFormThunk({ id: Number(param.id), token }))
     }
-  }, [param])
+  }, [param, token])
 
-  const surveyJson = useSurveyJson({form})
+  useEffect(() => {
+    if (form) {
+      dispatch(getQuestionsThunk({ token, id: form.id }))
+    }
+  }, [form, token])
+
+  const surveyJson = useSurveyJson({ form, questions })
 
   const survey = new Model(surveyJson)
 
