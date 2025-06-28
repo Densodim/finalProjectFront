@@ -2,8 +2,8 @@ import type { UsersTypeAPI } from "./lib/zodUsers.ts"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { RejectedPayload } from "../login/authSlice.ts"
-import type { updateUserProps } from "../../api/admin/adminAPI.tsx"
-import { adminAPI } from "../../api/admin/adminAPI.tsx"
+import type { updateUserProps } from "../../api/adminAPI.tsx"
+import { adminAPI } from "../../api/adminAPI.tsx"
 import { handleThunkError } from "../../utils/handleThunkError.ts"
 
 const initialState: AdminSliceType = {

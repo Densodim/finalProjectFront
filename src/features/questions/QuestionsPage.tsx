@@ -1,8 +1,9 @@
 import { Outlet } from "react-router"
 
-export default function FormPage() {
+export default function QuestionsPage() {
   return (
     <>
+      <h1>Question Page</h1>
       <Outlet />
     </>
   )

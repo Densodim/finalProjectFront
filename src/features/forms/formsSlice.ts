@@ -1,15 +1,17 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { FormTypeAPI } from "./lib/zodForms.ts"
-import { adminAPI } from "../../api/admin/adminAPI.tsx"
+import { adminAPI } from "../../api/adminAPI.tsx"
 import { handleThunkError } from "../../utils/handleThunkError.ts"
 import type { RejectedType } from "../admin/adminSlice.ts"
 import type { RejectedPayload } from "../login/authSlice.ts"
-import {
+import type {
   CreateFormType,
   DeleteFormType,
-  formsAPI,
-} from "../../api/forms/formsAPI.ts"
+  GetOneFormType,
+  UpdateFormType,
+} from "../../api/formsAPI.ts"
+import { formsAPI } from "../../api/formsAPI.ts"
 
 const initialState: FormsSliceType = {
   form: null,
@@ -65,6 +67,45 @@ export const deleteFormThunk = createAsyncThunk<
   }
 })
 
+export const getOneFormThunk = createAsyncThunk<
+  FormTypeAPI,
+  GetOneFormType,
+  RejectedType
+>("forms/getForm", async ({ id, token }, { rejectWithValue }) => {
+  try {
+    const response = await formsAPI.getForm({ token, id })
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
+
+export const updateFormThunk = createAsyncThunk<
+  FormTypeAPI,
+  UpdateFormType,
+  RejectedType
+>(
+  "forms/updateForm",
+  async (
+    { token, id, title, description, categoryId, isPublished },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await formsAPI.updateForm({
+        token,
+        id,
+        title,
+        description,
+        categoryId,
+        isPublished,
+      })
+      return response.data
+    } catch (e: any) {
+      return rejectWithValue(handleThunkError(e))
+    }
+  },
+)
+
 export const formsSlice = createSlice({
   name: "forms",
   initialState,
@@ -113,8 +154,23 @@ export const formsSlice = createSlice({
         state.status = "loading"
         state.message = "Loading ..."
       })
+      .addCase(deleteFormThunk.fulfilled, state => {
+        state.status = "idle"
+        state.message = ""
+      })
       .addCase(
-        deleteFormThunk.fulfilled,
+        deleteFormThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(getOneFormThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        getOneFormThunk.fulfilled,
         (state, action: PayloadAction<FormTypeAPI>) => {
           state.status = "idle"
           state.form = action.payload
@@ -122,7 +178,26 @@ export const formsSlice = createSlice({
         },
       )
       .addCase(
-        deleteFormThunk.rejected,
+        getOneFormThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(updateFormThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        updateFormThunk.fulfilled,
+        (state, action: PayloadAction<FormTypeAPI>) => {
+          state.status = "idle"
+          state.form = action.payload
+          state.message = ""
+        },
+      )
+      .addCase(
+        updateFormThunk.rejected,
         (state, action: PayloadAction<RejectedPayload | undefined>) => {
           state.status = "failed"
           state.error = action.payload?.message
@@ -131,11 +206,13 @@ export const formsSlice = createSlice({
   },
   selectors: {
     selectAllForms: state => state.forms,
-    selectStatusForm: state => state.status
+    selectStatusForm: state => state.status,
+    selectOneForm: state => state.form,
   },
 })
 
-export const { selectAllForms, selectStatusForm } = formsSlice.selectors
+export const { selectAllForms, selectStatusForm, selectOneForm } =
+  formsSlice.selectors
 //types
 type FormsSliceType = {
   forms: FormTypeAPI[] | null

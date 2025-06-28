@@ -12,6 +12,10 @@ import CreateUserPage from "../features/admin/components/users/createUserPage.ts
 import EditUserPage from "../features/admin/components/users/editUserPage.tsx"
 import AllFormsPage from "../features/forms/components/AllFormsPage.tsx"
 import CategoriesPage from "../features/categories/CategoriesPage.tsx"
+import SurveyComponent from "../features/survey/SurveyComponent.tsx"
+import { SurveyCreatorWidget } from "../features/survey/SurveyCreator.tsx"
+import QuestionsPage from "../features/questions/QuestionsPage.tsx"
+
 
 export const router = createBrowserRouter([
   {
@@ -23,13 +27,25 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "/",
-            Component: UserPage,
+            Component: UserPage
+          },
+          {
+            path: "/forms",
+            Component: FormPage,
             children: [
               {
-                path: "/forms",
-                Component: FormPage,
+                path: 'createForm/:id',
+                Component: SurveyCreatorWidget
               },
-            ],
+              {
+                path: "viewForm/:id",
+                Component: SurveyComponent
+              },
+              {
+                path: 'questions/:id',
+                Component: QuestionsPage
+              }
+            ]
           },
           {
             path: "/admin",
@@ -37,36 +53,36 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: "allUsers",
-                Component: AllUsersPage,
+                Component: AllUsersPage
               },
               {
                 path: "createUser",
-                Component: CreateUserPage,
+                Component: CreateUserPage
               },
               {
                 path: `editUser/:id`,
-                Component: EditUserPage,
+                Component: EditUserPage
               },
               {
                 path: "allForms",
-                Component: AllFormsPage,
+                Component: AllFormsPage
               },
               {
                 path: "categories",
-                Component: CategoriesPage,
-              },
-            ],
-          },
-        ],
+                Component: CategoriesPage
+              }
+            ]
+          }
+        ]
       },
       {
         path: "/sign-in",
-        Component: SignInPage,
+        Component: SignInPage
       },
       {
         path: "/register",
-        Component: RegisterPage,
-      },
-    ],
-  },
+        Component: RegisterPage
+      }
+    ]
+  }
 ])

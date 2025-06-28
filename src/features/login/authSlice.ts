@@ -1,8 +1,8 @@
 import type { LoginApiType } from "./lib/zodLogin.ts"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import type { UserRole } from "../../api/auth/authAPI.ts"
-import { authAPI } from "../../api/auth/authAPI.ts"
+import type { UserRole } from "../../api/authAPI.ts"
+import { authAPI } from "../../api/authAPI.ts"
 import type { Language } from "./lib/translations.ts"
 import {
   getErrorAndStatusCode,

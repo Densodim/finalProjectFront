@@ -6,6 +6,6 @@ const setting = {
 }
 
 export const instance = axios.create({
-  baseURL: "https://final-project-server-mauve-ten.vercel.app/api/",
+  baseURL: "https://final-project-server-flame.vercel.app/api/",
   ...setting,
 })

@@ -6,8 +6,8 @@ import { handleThunkError } from "../../utils/handleThunkError.ts"
 import type {
   createCategoryProps,
   DeleteCategoryProps,
-} from "../../api/caterogy/categoryApi.ts"
-import { categoryApi } from "../../api/caterogy/categoryApi.ts"
+} from "../../api/categoryAPI.ts"
+import { categoryAPI } from "../../api/categoryAPI.ts"
 import type { RejectedPayload } from "../login/authSlice.ts"
 
 export const initialState: CategoriesSliceType = {
@@ -24,7 +24,7 @@ export const getAllCategoriesThunk = createAsyncThunk<
   RejectedType
 >("admin/getAllCategories", async (token, { rejectWithValue }) => {
   try {
-    const response = await categoryApi.getCategories(token)
+    const response = await categoryAPI.getCategories(token)
     return response.data
   } catch (e: any) {
     return rejectWithValue(handleThunkError(e))
@@ -39,7 +39,7 @@ export const createCategoryThunk = createAsyncThunk<
   "category/createCategory",
   async ({ token, name, description }, { rejectWithValue }) => {
     try {
-      const response = await categoryApi.createCategories({
+      const response = await categoryAPI.createCategories({
         token,
         name,
         description,
@@ -57,7 +57,7 @@ export const deleteCategoryThunk = createAsyncThunk<
   RejectedType
 >("category/deleteCategory", async ({ token, id }, { rejectWithValue }) => {
   try {
-    const response = await categoryApi.deleteCategory({ token, id })
+    const response = await categoryAPI.deleteCategory({ token, id })
     return response.data
   } catch (e: any) {
     return rejectWithValue(handleThunkError(e))
