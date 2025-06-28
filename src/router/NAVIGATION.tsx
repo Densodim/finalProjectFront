@@ -5,7 +5,6 @@ import GroupIcon from "@mui/icons-material/Group"
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter"
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered"
 import CategoryIcon from "@mui/icons-material/Category"
-import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder"
 import TableViewIcon from "@mui/icons-material/TableView"
 
 export const NAVIGATION: Navigation = [
@@ -36,7 +35,7 @@ export const NAVIGATION: Navigation = [
         segment: "categories",
         title: "Categories",
         icon: <CategoryIcon />,
-      },
+      }
     ],
   },
   {
@@ -44,11 +43,6 @@ export const NAVIGATION: Navigation = [
     title: "Forms",
     icon: <FormatAlignCenterIcon />,
     children: [
-      {
-        segment: "createForm",
-        title: "Creator Forms",
-        icon: <CreateNewFolderIcon />,
-      },
       {
         segment: "viewForm",
         title: "View Forms",

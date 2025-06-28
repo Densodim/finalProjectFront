@@ -1,6 +1,6 @@
-import { instance } from "../instance.ts"
+import { instance } from "./instance.ts"
 
-export const categoryApi = {
+export const categoryAPI = {
   getCategories(token: string) {
     const promise = instance.get("categories", {
       headers: {

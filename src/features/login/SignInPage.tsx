@@ -1,4 +1,4 @@
-import { Box, Button, LinearProgress, Link } from "@mui/material"
+import { Button, LinearProgress, Link, Stack } from "@mui/material"
 import { translations } from "./lib/translations.ts"
 import WrapperBox from "./components/WrapperBox.tsx"
 import { useFormik } from "formik"
@@ -56,7 +56,14 @@ export default function SignInPage() {
   return (
     <WrapperBox>
       <HeaderForm title={t.login} />
-      <Box component="form" onSubmit={formikLogin.handleSubmit}>
+      <Stack
+        component="form"
+        sx={{ width: "50ch" }}
+        spacing={2}
+        noValidate
+        autoComplete="on"
+        onSubmit={formikLogin.handleSubmit}
+      >
         <WrapperTextField
           label={t.email}
           fieldProps={formikLogin.getFieldProps("email")}
@@ -89,7 +96,7 @@ export default function SignInPage() {
         >
           {t.submitRegister}
         </Link>
-      </Box>
+      </Stack>
     </WrapperBox>
   )
 }

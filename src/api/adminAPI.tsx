@@ -1,5 +1,5 @@
-import type { UserRole } from "../auth/authAPI.ts"
-import { instance } from "../instance.ts"
+import type { UserRole } from "./authAPI.ts"
+import { instance } from "./instance.ts"
 
 export const adminAPI = {
   getUsers(token: string) {

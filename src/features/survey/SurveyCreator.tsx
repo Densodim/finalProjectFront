@@ -1,20 +1,21 @@
 import type { ICreatorOptions } from "survey-creator-core"
 import { useEffect, useState } from "react"
 import { SurveyCreator, SurveyCreatorComponent } from "survey-creator-react"
-import { Button, Stack } from "@mui/material"
+import { Button, LinearProgress, Stack } from "@mui/material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
 import {
-  createFormThunk,
   getOneFormThunk,
   selectOneForm,
+  selectStatusForm,
+  updateFormThunk,
 } from "../forms/formsSlice.ts"
 import { selectToken } from "../login/authSlice.ts"
 import { useNavigate, useParams } from "react-router"
 import useSurveyJson from "./hooks/useSurveyJson.ts"
+import { createQuestionThunk } from "../questions/questionsSlice.ts"
 
 const defaultCreatorOptions: ICreatorOptions = {
   autoSaveEnabled: true,
-  collapseOnDrag: true,
 }
 
 export function SurveyCreatorWidget() {
@@ -25,6 +26,7 @@ export function SurveyCreatorWidget() {
   const dispatch = useAppDispatch()
   const form = useAppSelector(selectOneForm)
   const navigate = useNavigate()
+  const status = useAppSelector(selectStatusForm)
 
   useEffect(() => {
     if (param.id) {
@@ -45,14 +47,31 @@ export function SurveyCreatorWidget() {
   ) => {
     const parseCreator: ParseCreatorType = JSON.parse(creator?.text)
     callback(saveNo, true)
-    dispatch(
-      createFormThunk({
-        token,
-        description: parseCreator.description,
-        title: parseCreator.title,
-        categoryId: Number(form?.categoryId),
-      }),
-    )
+    if (form) {
+      dispatch(
+        updateFormThunk({
+          id: form.id,
+          token,
+          description: parseCreator.desctiption && '',
+          title: parseCreator.title,
+          categoryId: Number(form?.categoryId),
+        }),
+      )
+      parseCreator.pages.forEach(page =>
+        page.elements.forEach((el, index) => {
+          dispatch(
+            createQuestionThunk({
+              token,
+              title: el.name,
+              desctiption: el.name,
+              formId: form.id,
+              order: index,
+              type: el.type
+            }),
+          )
+        }),
+      )
+    }
   }
 
   creator.text = JSON.stringify(surveyJson)
@@ -60,6 +79,15 @@ export function SurveyCreatorWidget() {
   const handleBack = () => {
     navigate(-1)
   }
+
+  if (status === "loading") {
+    return (
+      <div style={{ width: "100%" }}>
+        <LinearProgress />
+      </div>
+    )
+  }
+
   return (
     <>
       <Stack spacing={2}>
@@ -80,7 +108,7 @@ export function SurveyCreatorWidget() {
 
 //types
 type ParseCreatorType = {
-  description: string
+  desctiption: string
   title: string
   pages: CreatorPageType[]
 }
@@ -93,5 +121,12 @@ type CreatorPageType = {
 type CreatorElementType = {
   name: string
   title: string
-  type: string
+  type:
+    | "text"
+    | "comment"
+    | "radiogroup"
+    | "checkbox"
+    | "email"
+    | "number"
+    | "file"
 }

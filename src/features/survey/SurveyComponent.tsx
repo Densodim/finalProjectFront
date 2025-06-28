@@ -5,6 +5,7 @@ import { selectToken } from "../login/authSlice.ts"
 import { useNavigate, useParams } from "react-router"
 import ButtonLink from "../../utils/ButtonLink.tsx"
 import { getOneFormThunk, selectOneForm } from "../forms/formsSlice.ts"
+import useSurveyJson from "./hooks/useSurveyJson.ts"
 
 export default function SurveyComponent() {
   const token = useAppSelector(selectToken)
@@ -19,24 +20,7 @@ export default function SurveyComponent() {
     }
   }, [param])
 
-  const surveyJson = {
-    description: form?.description,
-    title: form?.title,
-    pages: [
-      {
-        description: "PageTest",
-        name: "page1",
-        title: "PageTest",
-        elements: [
-          {
-            name: "question1",
-            title: "Q1111",
-            type: "text",
-          },
-        ],
-      },
-    ],
-  }
+  const surveyJson = useSurveyJson({form})
 
   const survey = new Model(surveyJson)
 

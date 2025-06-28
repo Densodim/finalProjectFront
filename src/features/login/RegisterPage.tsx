@@ -1,5 +1,5 @@
 import WrapperBox from "./components/WrapperBox.tsx"
-import { Box, Button, LinearProgress, Stack } from "@mui/material"
+import { Button, LinearProgress, Stack } from "@mui/material"
 import HeaderForm from "./components/HeaderForm.tsx"
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts"
 import {
@@ -35,7 +35,7 @@ export default function RegisterPage() {
     },
     onSubmit: async values => {
       await dispatch(registerAsync(values))
-      navigate('/')
+      navigate("/")
     },
   })
   const handleSubmit = () => {
@@ -55,7 +55,14 @@ export default function RegisterPage() {
 
   return (
     <WrapperBox>
-      <Box component="form" onSubmit={formikRegister.handleSubmit}>
+      <Stack
+        component="form"
+        sx={{ width: "50ch" }}
+        spacing={2}
+        noValidate
+        autoComplete="on"
+        onSubmit={formikRegister.handleSubmit}
+      >
         <HeaderForm title={t.register} />
         <WrapperTextField
           label={t.username}
@@ -88,17 +95,13 @@ export default function RegisterPage() {
             sx={{ mt: 2 }}
             onClick={handleSubmit}
           >
-            {t.submit}
+            {t.submitRegister}
           </Button>
-          <Button
-            type="submit"
-            variant="outlined"
-            color="primary"
-          >
+          <Button type="submit" variant="outlined" color="primary">
             {t.cancel}
           </Button>
         </Stack>
-      </Box>
+      </Stack>
     </WrapperBox>
   )
 }

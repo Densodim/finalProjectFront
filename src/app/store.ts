@@ -13,8 +13,9 @@ import { authSlice } from "../features/login/authSlice.ts"
 import { adminSlice } from "../features/admin/adminSlice.ts"
 import { formsSlice } from "../features/forms/formsSlice.ts"
 import { categoriesSlice } from "../features/categories/categoriesSlice.ts"
+import { questionsSlice } from "../features/questions/questionsSlice.ts"
 
-const rootReducer = combineSlices(authSlice, adminSlice, formsSlice, categoriesSlice)
+const rootReducer = combineSlices(authSlice, adminSlice, formsSlice, categoriesSlice, questionsSlice)
 
 export type RootState = ReturnType<typeof rootReducer>
 

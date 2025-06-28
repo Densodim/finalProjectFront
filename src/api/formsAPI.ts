@@ -1,4 +1,4 @@
-import { instance } from "../instance.ts"
+import { instance } from "./instance.ts"
 
 export const formsAPI = {
   createForm({ token, title, description, categoryId }: CreateFormType) {
@@ -25,6 +25,26 @@ export const formsAPI = {
     })
     return promise
   },
+  updateForm({
+    id,
+    token,
+    title,
+    description,
+    categoryId,
+    isPublished = true,
+  }: UpdateFormType) {
+    const promise = instance.patch(
+      `form/${id}`,
+      {
+        title,
+        description,
+        categoryId,
+        isPublished,
+      },
+      { headers: { Authorization: `Bearer ${token}` } },
+    )
+    return promise
+  },
 }
 //types
 export type CreateFormType = {
@@ -38,3 +58,8 @@ export type DeleteFormType = {
   id: number
 }
 export type GetOneFormType = DeleteFormType
+
+export type UpdateFormType = CreateFormType & {
+  id: number
+  isPublished?: boolean
+}

@@ -2,6 +2,7 @@ import type { GridColDef } from "@mui/x-data-grid"
 import EditIcon from "@mui/icons-material/Edit"
 import { IconButton } from "@mui/material"
 import PreviewIcon from "@mui/icons-material/Preview"
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { useNavigate } from "react-router"
 
 export default function useColumsForms() {
@@ -65,6 +66,24 @@ export default function useColumsForms() {
           }}
         >
           <PreviewIcon />
+        </IconButton>
+      ),
+    },
+    {
+      field: "question",
+      headerName: "Question",
+      width: 60,
+      sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
+      renderCell: params => (
+        <IconButton
+          color="primary"
+          onClick={() => {
+            navigate(`/forms/questions/${params.id}`)
+          }}
+        >
+          <QuestionMarkIcon />
         </IconButton>
       ),
     },

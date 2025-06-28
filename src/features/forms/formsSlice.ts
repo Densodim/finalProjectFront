@@ -1,7 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { FormTypeAPI } from "./lib/zodForms.ts"
-import { adminAPI } from "../../api/admin/adminAPI.tsx"
+import { adminAPI } from "../../api/adminAPI.tsx"
 import { handleThunkError } from "../../utils/handleThunkError.ts"
 import type { RejectedType } from "../admin/adminSlice.ts"
 import type { RejectedPayload } from "../login/authSlice.ts"
@@ -9,8 +9,9 @@ import type {
   CreateFormType,
   DeleteFormType,
   GetOneFormType,
-} from "../../api/forms/formsAPI.ts"
-import { formsAPI } from "../../api/forms/formsAPI.ts"
+  UpdateFormType,
+} from "../../api/formsAPI.ts"
+import { formsAPI } from "../../api/formsAPI.ts"
 
 const initialState: FormsSliceType = {
   form: null,
@@ -78,6 +79,32 @@ export const getOneFormThunk = createAsyncThunk<
     return rejectWithValue(handleThunkError(e))
   }
 })
+
+export const updateFormThunk = createAsyncThunk<
+  FormTypeAPI,
+  UpdateFormType,
+  RejectedType
+>(
+  "forms/updateForm",
+  async (
+    { token, id, title, description, categoryId, isPublished },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await formsAPI.updateForm({
+        token,
+        id,
+        title,
+        description,
+        categoryId,
+        isPublished,
+      })
+      return response.data
+    } catch (e: any) {
+      return rejectWithValue(handleThunkError(e))
+    }
+  },
+)
 
 export const formsSlice = createSlice({
   name: "forms",
@@ -152,6 +179,25 @@ export const formsSlice = createSlice({
       )
       .addCase(
         getOneFormThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(updateFormThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        updateFormThunk.fulfilled,
+        (state, action: PayloadAction<FormTypeAPI>) => {
+          state.status = "idle"
+          state.form = action.payload
+          state.message = ""
+        },
+      )
+      .addCase(
+        updateFormThunk.rejected,
         (state, action: PayloadAction<RejectedPayload | undefined>) => {
           state.status = "failed"
           state.error = action.payload?.message

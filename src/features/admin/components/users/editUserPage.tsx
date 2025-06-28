@@ -15,7 +15,7 @@ import {
   Stack,
 } from "@mui/material"
 import WrapperTextField from "../../../login/components/WrapperTextField.tsx"
-import type { UserRole } from "../../../../api/auth/authAPI.ts"
+import type { UserRole } from "../../../../api/authAPI.ts"
 import Radio from "@mui/material/Radio"
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks.ts"
