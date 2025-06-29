@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -16,6 +15,8 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts"
 import { selectCategories } from "../../categories/categoriesSlice.ts"
 import { createFormThunk, getAllFormsThunk } from "../formsSlice.ts"
 import { selectToken } from "../../login/authSlice.ts"
+import ButtonSubmit from "../../../utils/ButtonSubmit.tsx"
+
 
 export default function CreateFormPage({ open, setOpen }: Props) {
   const dispatch = useAppDispatch()
@@ -86,14 +87,7 @@ export default function CreateFormPage({ open, setOpen }: Props) {
                 ))}
               </Select>
             </FormControl>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
-            >
-              Add Form
-            </Button>
+            <ButtonSubmit>Add Form</ButtonSubmit>
           </Box>
         </Modal>
       </div>

@@ -1,21 +1,20 @@
 import type { FormTypeAPI } from "../../forms/lib/zodForms.ts"
+import type { QuestionsTypeAPI } from "../../questions/lib/zodQuestions.ts"
 
-export default function useSurveyJson({ form }: Props) {
+export default function useSurveyJson({ form, questions }: Props) {
   const surveyJson = {
     description: form?.description,
     title: form?.title,
     pages: [
       {
-        description: "PageTest",
-        name: "page1",
-        title: "PageTest",
-        elements: [
-          {
-            name: "question1",
-            title: "Q1111",
-            type: "text",
-          },
-        ],
+        // description: "PageTest",
+        // name: "page1",
+        // title: "PageTest",
+        elements: questions?.map(element => ({
+          name: element.desctiption,
+          title: element.title,
+          type: element.type,
+        })),
       },
     ],
   }
@@ -25,4 +24,5 @@ export default function useSurveyJson({ form }: Props) {
 //types
 type Props = {
   form?: FormTypeAPI | null
+  questions?: QuestionsTypeAPI[] | null
 }

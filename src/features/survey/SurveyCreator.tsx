@@ -52,7 +52,7 @@ export function SurveyCreatorWidget() {
         updateFormThunk({
           id: form.id,
           token,
-          description: parseCreator.desctiption && '',
+          description: parseCreator.desctiption && "",
           title: parseCreator.title,
           categoryId: Number(form?.categoryId),
         }),
@@ -66,7 +66,8 @@ export function SurveyCreatorWidget() {
               desctiption: el.name,
               formId: form.id,
               order: index,
-              type: el.type
+              type: el.type,
+              isRequired: true,
             }),
           )
         }),

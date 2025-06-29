@@ -1,5 +1,15 @@
 import { z } from "zod"
 
+export const questionTypeLiterals = [
+  "text",
+  "comment",
+  "radiogroup",
+  "checkbox",
+  "email",
+  "number",
+  "file",
+] as const
+
 export const zodQuestions = z.object({
   id: z.number({ message: "ID of the question" }),
   title: z
@@ -16,15 +26,7 @@ export const zodQuestions = z.object({
       invalid_type_error: "Invalid type",
     })
     .min(6, "should be at least 6 signs long"),
-  type: z.union([
-    z.literal("text"),
-    z.literal("comment"),
-    z.literal("radiogroup"),
-    z.literal("checkbox"),
-    z.literal("email"),
-    z.literal("number"),
-    z.literal("file"),
-  ]),
+  type: z.enum(questionTypeLiterals, { required_error: "Type required" }),
   isRequired: z.boolean(),
   order: z.number({
     message: "Order order",
@@ -37,14 +39,15 @@ export const zodQuestions = z.object({
 })
 
 export const zodCreateQuestion = zodQuestions.pick({
-  formId: true,
   title: true,
   desctiption: true,
   type: true,
   order: true,
+  isRequired: true,
 })
 
 export type QuestionsTypeAPI = z.infer<typeof zodQuestions>
 export type CreateQuestionType = z.infer<typeof zodCreateQuestion> & {
   token: string
+  formId: number
 }

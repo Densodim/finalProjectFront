@@ -51,7 +51,7 @@ export default function WrapperTextField({
 type Props = {
   label?: string
   placeholder?: string
-  type?: "text" | "password"
+  type?: "text" | "password" | "number"
   error?: string
   fieldProps: any
   isPassword?: boolean
