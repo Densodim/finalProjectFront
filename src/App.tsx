@@ -6,6 +6,7 @@ import { ReactRouterAppProvider } from "@toolpad/core/react-router"
 import { Outlet } from "react-router"
 import AuthInitializer from "./features/login/components/AuthInitializer.tsx"
 import { NAVIGATION } from "./router/NAVIGATION.tsx"
+import AccountCustomSlotProps from "./features/login/components/AccountCustomSlotProps.tsx"
 
 const BRANDING = {
   title: "Final Project clone Google form",
@@ -22,10 +23,12 @@ export const App = () => {
             horizontal: "center",
           }}
         >
-          <ReactRouterAppProvider navigation={NAVIGATION} branding={BRANDING}>
-            <AuthInitializer />
-            <Outlet />
-          </ReactRouterAppProvider>
+          <AccountCustomSlotProps>
+            <ReactRouterAppProvider navigation={NAVIGATION} branding={BRANDING}>
+              <AuthInitializer />
+              <Outlet />
+            </ReactRouterAppProvider>
+          </AccountCustomSlotProps>
         </SnackbarProvider>
         {/*</PersistGate>*/}
       </Provider>
