@@ -45,6 +45,12 @@ export const formsAPI = {
     )
     return promise
   },
+  getPublishedForm(token: string) {
+    const promise = instance.get("form/publishedForm", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    return promise
+  },
 }
 //types
 export type CreateFormType = {
