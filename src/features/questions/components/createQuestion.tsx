@@ -48,8 +48,7 @@ export default function CreateQuestion({ open, setOpen, formId }: Props) {
             formId,
           }),
         )
-        dispatch(getQuestionsThunk({ token, id: formId }))
-        formik.resetForm()
+        await dispatch(getQuestionsThunk({ token, id: formId }))
         setOpen(false)
       }
     },

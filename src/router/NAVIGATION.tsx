@@ -40,12 +40,12 @@ export const NAVIGATION: Navigation = [
   },
   {
     segment: "forms",
-    title: "Forms",
+    title: "User Form",
     icon: <FormatAlignCenterIcon />,
     children: [
       {
-        segment: "viewForm",
-        title: "View Forms",
+        segment: "viewUserForm",
+        title: "View User Forms",
         icon: <TableViewIcon />,
       },
     ],
