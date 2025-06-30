@@ -51,6 +51,15 @@ export const formsAPI = {
     })
     return promise
   },
+
+  fullTextSearch({ token, query }: FullTextSearchType) {
+    const promise = instance.post(
+      "form/search",
+      { query },
+      { headers: { Authorization: `Bearer ${token}` } },
+    )
+    return promise
+  },
 }
 //types
 export type CreateFormType = {
@@ -68,4 +77,8 @@ export type GetOneFormType = DeleteFormType
 export type UpdateFormType = CreateFormType & {
   id: number
   isPublished?: boolean
+}
+export type FullTextSearchType = {
+  token: string
+  query: string
 }
