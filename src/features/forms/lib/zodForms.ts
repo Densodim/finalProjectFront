@@ -40,3 +40,11 @@ export const zodCreateForm = zodForms.pick({
   description: true,
   categoryId: true,
 })
+
+export const zodUpdateForm = zodForms.pick({
+  title: true,
+  description: true,
+  categoryId: true,
+  isPublished: true,
+  isDeleted: true,
+})

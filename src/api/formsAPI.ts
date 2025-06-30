@@ -32,6 +32,7 @@ export const formsAPI = {
     description,
     categoryId,
     isPublished = true,
+    isDeleted = false,
   }: UpdateFormType) {
     const promise = instance.patch(
       `form/${id}`,
@@ -40,6 +41,7 @@ export const formsAPI = {
         description,
         categoryId,
         isPublished,
+        isDeleted
       },
       { headers: { Authorization: `Bearer ${token}` } },
     )
@@ -77,6 +79,7 @@ export type GetOneFormType = DeleteFormType
 export type UpdateFormType = CreateFormType & {
   id: number
   isPublished?: boolean
+  isDeleted?: boolean
 }
 export type FullTextSearchType = {
   token: string

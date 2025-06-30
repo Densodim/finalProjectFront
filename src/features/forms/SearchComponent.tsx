@@ -22,7 +22,7 @@ export default function SearchComponent() {
   const dispatch = useAppDispatch()
   const token = useAppSelector(selectToken)
 
-  console.log(forms)
+  // console.log(forms)
 
   const handleOpen = () => {
     setOpen(true)

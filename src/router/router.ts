@@ -15,6 +15,7 @@ import CategoriesPage from "../features/categories/CategoriesPage.tsx"
 import SurveyComponent from "../features/survey/SurveyComponent.tsx"
 import { SurveyCreatorWidget } from "../features/survey/SurveyCreator.tsx"
 import QuestionsPage from "../features/questions/QuestionsPage.tsx"
+import UpdateFormPage from "../features/forms/components/UpdateFormPage.tsx"
 
 
 export const router = createBrowserRouter([
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
               {
                 path: "viewForm/:id",
                 Component: SurveyComponent
+              },
+              {
+                path: 'updateForm/:id',
+                Component: UpdateFormPage
               },
               {
                 path: 'questions/:id',

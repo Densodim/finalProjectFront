@@ -3,6 +3,7 @@ import EditIcon from "@mui/icons-material/Edit"
 import { IconButton } from "@mui/material"
 import PreviewIcon from "@mui/icons-material/Preview"
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import UpdateIcon from '@mui/icons-material/Update';
 import { useNavigate } from "react-router"
 
 export default function useColumsForms() {
@@ -35,7 +36,7 @@ export default function useColumsForms() {
     },
     {
       field: "edit",
-      headerName: "Edit",
+      headerName: "Creator",
       width: 80,
       sortable: false,
       filterable: false,
@@ -84,6 +85,24 @@ export default function useColumsForms() {
           }}
         >
           <QuestionMarkIcon />
+        </IconButton>
+      ),
+    },
+    {
+      field: "updateForm",
+      headerName: "Update",
+      width: 60,
+      sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
+      renderCell: params => (
+        <IconButton
+          color="primary"
+          onClick={() => {
+            navigate(`/forms/updateForm/${params.id}`)
+          }}
+        >
+          <UpdateIcon />
         </IconButton>
       ),
     },
