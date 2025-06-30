@@ -36,7 +36,6 @@ export default function EditUserPage() {
   const selectedUser = useAppSelector(selectUser)
   const status = useAppSelector(selectStatusAdmin)
   const message = useAppSelector(selectMessageAdmin)
-  console.log("selectedUser", selectedUser)
 
   useEffect(() => {
     if (param.id) {

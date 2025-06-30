@@ -29,8 +29,8 @@ export default function CreateCategories({ open, setOpen }: Props) {
           description: values.description,
         }),
       )
-      setOpen(false)
       await dispatch(getAllCategoriesThunk(token))
+      setOpen(false)
     },
   })
 

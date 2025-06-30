@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router"
 import { App } from "../App.tsx"
 import Layout from "../features/layouts/dashboard.tsx"
 
-import UserPage from "../features/user/UserPage.tsx"
+import HomePage from "../features/user/HomePage.tsx"
 import AdminPage from "../features/admin/AdminPage.tsx"
 import SignInPage from "../features/login/SignInPage.tsx"
 import RegisterPage from "../features/login/RegisterPage.tsx"
@@ -12,10 +12,11 @@ import CreateUserPage from "../features/admin/components/users/createUserPage.ts
 import EditUserPage from "../features/admin/components/users/editUserPage.tsx"
 import AllFormsPage from "../features/forms/components/AllFormsPage.tsx"
 import CategoriesPage from "../features/categories/CategoriesPage.tsx"
-import SurveyComponent from "../features/survey/SurveyComponent.tsx"
 import { SurveyCreatorWidget } from "../features/survey/SurveyCreator.tsx"
 import QuestionsPage from "../features/questions/QuestionsPage.tsx"
-
+import UpdateFormPage from "../features/forms/components/UpdateFormPage.tsx"
+import UserPage from "../features/user/UserPage.tsx"
+import SurveyComponent from "../features/survey/SurveyComponent.tsx"
 
 export const router = createBrowserRouter([
   {
@@ -27,25 +28,33 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "/",
-            Component: UserPage
+            Component: HomePage,
           },
           {
             path: "/forms",
             Component: FormPage,
             children: [
               {
-                path: 'createForm/:id',
-                Component: SurveyCreatorWidget
+                path: "createForm/:id",
+                Component: SurveyCreatorWidget,
               },
               {
-                path: "viewForm/:id",
+                path: 'viewForm/:id',
                 Component: SurveyComponent
               },
               {
-                path: 'questions/:id',
-                Component: QuestionsPage
-              }
-            ]
+                path: "viewUserForm",
+                Component: UserPage,
+              },
+              {
+                path: "updateForm/:id",
+                Component: UpdateFormPage,
+              },
+              {
+                path: "questions/:id",
+                Component: QuestionsPage,
+              },
+            ],
           },
           {
             path: "/admin",
@@ -53,36 +62,36 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: "allUsers",
-                Component: AllUsersPage
+                Component: AllUsersPage,
               },
               {
                 path: "createUser",
-                Component: CreateUserPage
+                Component: CreateUserPage,
               },
               {
                 path: `editUser/:id`,
-                Component: EditUserPage
+                Component: EditUserPage,
               },
               {
                 path: "allForms",
-                Component: AllFormsPage
+                Component: AllFormsPage,
               },
               {
                 path: "categories",
-                Component: CategoriesPage
-              }
-            ]
-          }
-        ]
+                Component: CategoriesPage,
+              },
+            ],
+          },
+        ],
       },
       {
         path: "/sign-in",
-        Component: SignInPage
+        Component: SignInPage,
       },
       {
         path: "/register",
-        Component: RegisterPage
-      }
-    ]
-  }
+        Component: RegisterPage,
+      },
+    ],
+  },
 ])

@@ -88,7 +88,7 @@ export const updateFormThunk = createAsyncThunk<
 >(
   "forms/updateForm",
   async (
-    { token, id, title, description, categoryId, isPublished },
+    { token, id, title, description, categoryId, isPublished, isDeleted },
     { rejectWithValue },
   ) => {
     try {
@@ -99,6 +99,7 @@ export const updateFormThunk = createAsyncThunk<
         description,
         categoryId,
         isPublished,
+        isDeleted
       })
       return response.data
     } catch (e: any) {
