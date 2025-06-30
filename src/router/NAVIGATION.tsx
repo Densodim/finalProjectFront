@@ -13,7 +13,7 @@ export const NAVIGATION: Navigation = [
     title: "Main items",
   },
   {
-    title: "View",
+    title: "Home page",
     icon: <DashboardIcon />,
   },
   {

@@ -8,6 +8,7 @@ import type { RejectedPayload } from "../login/authSlice.ts"
 import type {
   CreateFormType,
   DeleteFormType,
+  FullTextSearchType,
   GetOneFormType,
   UpdateFormType,
 } from "../../api/formsAPI.ts"
@@ -105,6 +106,19 @@ export const updateFormThunk = createAsyncThunk<
     }
   },
 )
+
+export const searchThunks = createAsyncThunk<
+  ResponseMeilisearchTypes,
+  FullTextSearchType,
+  RejectedType
+>("forms/search", async ({ token, query }, { rejectWithValue }) => {
+  try {
+    const response = await formsAPI.fullTextSearch({ token, query })
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
 
 export const getPublishedFormThunk = createAsyncThunk<
   FormTypeAPI[],
@@ -235,6 +249,25 @@ export const formsSlice = createSlice({
           state.error = action.payload?.message
         },
       )
+      .addCase(searchThunks.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        searchThunks.fulfilled,
+        (state, action: PayloadAction<ResponseMeilisearchTypes>) => {
+          state.status = "idle"
+          state.forms = action.payload.hits
+          state.message = ""
+        },
+      )
+      .addCase(
+        searchThunks.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
   },
   selectors: {
     selectAllForms: state => state.forms,
@@ -252,4 +285,13 @@ type FormsSliceType = {
   status: "idle" | "loading" | "failed"
   error: string | undefined
   message: string
+}
+
+type ResponseMeilisearchTypes = {
+  hits: FormTypeAPI[]
+  query: string
+  processingTimeMs: number
+  limit: number
+  offset: number
+  estimatedTotalHits: number
 }
