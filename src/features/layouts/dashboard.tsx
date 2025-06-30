@@ -8,6 +8,7 @@ import {
   selectUserRole,
 } from "../login/authSlice.ts"
 import { LinearProgress } from "@mui/material"
+import SearchComponent from "../forms/SearchComponent.tsx"
 
 export default function Layout() {
   const location = useLocation()
@@ -35,7 +36,11 @@ export default function Layout() {
   }
 
   return (
-    <DashboardLayout>
+    <DashboardLayout
+      slots={{
+        toolbarActions: SearchComponent,
+      }}
+    >
       <PageContainer>
         <Outlet />
       </PageContainer>

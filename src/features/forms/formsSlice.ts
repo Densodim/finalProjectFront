@@ -106,6 +106,19 @@ export const updateFormThunk = createAsyncThunk<
   },
 )
 
+export const getPublishedFormThunk = createAsyncThunk<
+  FormTypeAPI[],
+  string,
+  RejectedType
+>("forms/getPublishedForm", async (token, { rejectWithValue }) => {
+  try {
+    const response = await formsAPI.getPublishedForm(token)
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
+
 export const formsSlice = createSlice({
   name: "forms",
   initialState,
@@ -126,6 +139,25 @@ export const formsSlice = createSlice({
       )
       .addCase(
         getAllFormsThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(getPublishedFormThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        getPublishedFormThunk.fulfilled,
+        (state, action: PayloadAction<FormTypeAPI[]>) => {
+          state.status = "idle"
+          state.forms = action.payload
+          state.message = ""
+        },
+      )
+      .addCase(
+        getPublishedFormThunk.rejected,
         (state, action: PayloadAction<RejectedPayload | undefined>) => {
           state.status = "failed"
           state.error = action.payload?.message

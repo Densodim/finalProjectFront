@@ -49,7 +49,7 @@ export default function SurveyComponent() {
 
   return (
     <>
-      <ButtonLink handleReturn={handleReturn} />
+      <ButtonLink handleReturn={handleReturn} withoutSubmit={false}/>
       <div style={{ height: "100vh", width: "100%" }}>
         <Survey model={survey} />
       </div>
