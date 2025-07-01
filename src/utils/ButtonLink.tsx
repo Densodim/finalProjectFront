@@ -1,9 +1,11 @@
 import { Button, Stack } from "@mui/material"
 import type { MouseEventHandler } from "react"
+import type { SnackbarKey } from "notistack"
 
 export default function ButtonLink({
   handleReturn,
   withoutSubmit = true,
+  onClick,
 }: ButtonProps) {
   return (
     <Stack spacing={2} direction={"row"} margin={2}>
@@ -13,6 +15,7 @@ export default function ButtonLink({
           variant="contained"
           color="primary"
           sx={{ mt: 2 }}
+          onClick={onClick}
         >
           {"Submit"}
         </Button>
@@ -32,4 +35,5 @@ export default function ButtonLink({
 type ButtonProps = {
   handleReturn?: MouseEventHandler<HTMLButtonElement>
   withoutSubmit?: boolean
+  onClick?: () => SnackbarKey
 }

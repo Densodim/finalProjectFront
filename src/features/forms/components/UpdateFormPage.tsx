@@ -26,10 +26,12 @@ import { zodUpdateForm } from "../lib/zodForms.ts"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 import {
   getOneFormThunk,
+  selectMessageForms,
   selectOneForm,
   selectStatusForm,
   updateFormThunk,
 } from "../formsSlice.ts"
+import { enqueueSnackbar } from "notistack"
 
 export default function UpdateFormPage() {
   const params = useParams()
@@ -41,6 +43,7 @@ export default function UpdateFormPage() {
   const statusCategories = useAppSelector(selectStatusCategories)
   const statusForm = useAppSelector(selectStatusForm)
   const token = useAppSelector(selectToken)
+  const message = useAppSelector(selectMessageForms)
 
   useEffect(() => {
     dispatch(getAllCategoriesThunk(token))
@@ -81,6 +84,7 @@ export default function UpdateFormPage() {
             categoryId: Number(values.categoryId),
           }),
         )
+
         navigate(-1)
       }
     },
@@ -160,7 +164,10 @@ export default function UpdateFormPage() {
             ))}
           </Select>
         </FormControl>
-        <ButtonLink handleReturn={handleReturn} />
+        <ButtonLink
+          handleReturn={handleReturn}
+          onClick={() => enqueueSnackbar(message, { variant: "success" })}
+        />
       </Box>
     </>
   )
