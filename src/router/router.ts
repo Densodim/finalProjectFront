@@ -17,6 +17,7 @@ import QuestionsPage from "../features/questions/QuestionsPage.tsx"
 import UpdateFormPage from "../features/forms/components/UpdateFormPage.tsx"
 import UserPage from "../features/user/UserPage.tsx"
 import SurveyComponent from "../features/survey/SurveyComponent.tsx"
+import BlockedUserPage from "../features/user/BlockedUserPage.tsx"
 
 export const router = createBrowserRouter([
   {
@@ -39,8 +40,8 @@ export const router = createBrowserRouter([
                 Component: SurveyCreatorWidget,
               },
               {
-                path: 'viewForm/:id',
-                Component: SurveyComponent
+                path: "viewForm/:id",
+                Component: SurveyComponent,
               },
               {
                 path: "viewUserForm",
@@ -91,6 +92,10 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         Component: RegisterPage,
+      },
+      {
+        path: "/blocked",
+        Component: BlockedUserPage,
       },
     ],
   },

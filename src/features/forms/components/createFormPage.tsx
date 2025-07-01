@@ -13,12 +13,19 @@ import WrapperTextField from "../../login/components/WrapperTextField.tsx"
 import { style } from "../../../utils/styleModal.ts"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts"
 import { selectCategories } from "../../categories/categoriesSlice.ts"
-import { createFormThunk, getAllFormsThunk } from "../formsSlice.ts"
+import {
+  createFormThunk,
+  getAllFormsThunk,
+  getUserFormThunk,
+} from "../formsSlice.ts"
 import { selectToken } from "../../login/authSlice.ts"
 import ButtonSubmit from "../../../utils/ButtonSubmit.tsx"
 
-
-export default function CreateFormPage({ open, setOpen }: Props) {
+export default function CreateFormPage({
+  open,
+  setOpen,
+  users = false,
+}: Props) {
   const dispatch = useAppDispatch()
   const categories = useAppSelector(selectCategories)
   const token = useAppSelector(selectToken)
@@ -40,7 +47,11 @@ export default function CreateFormPage({ open, setOpen }: Props) {
         }),
       )
       setOpen(false)
-      await dispatch(getAllFormsThunk(token))
+      if (!users) {
+        await dispatch(getAllFormsThunk(token))
+      } else {
+        await dispatch(getUserFormThunk(token))
+      }
     },
   })
 
@@ -98,4 +109,5 @@ export default function CreateFormPage({ open, setOpen }: Props) {
 type Props = {
   open: boolean
   setOpen: (open: boolean) => void
+  users?: boolean
 }

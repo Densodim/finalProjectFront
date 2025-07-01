@@ -99,7 +99,7 @@ export const updateFormThunk = createAsyncThunk<
         description,
         categoryId,
         isPublished,
-        isDeleted
+        isDeleted,
       })
       return response.data
     } catch (e: any) {
@@ -128,6 +128,19 @@ export const getPublishedFormThunk = createAsyncThunk<
 >("forms/getPublishedForm", async (token, { rejectWithValue }) => {
   try {
     const response = await formsAPI.getPublishedForm(token)
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
+
+export const getUserFormThunk = createAsyncThunk<
+  FormTypeAPI[],
+  string,
+  RejectedType
+>("forms/getOneUserForm", async (token, { rejectWithValue }) => {
+  try {
+    const response = await formsAPI.getFormsOneUser(token)
     return response.data
   } catch (e: any) {
     return rejectWithValue(handleThunkError(e))
@@ -264,6 +277,25 @@ export const formsSlice = createSlice({
       )
       .addCase(
         searchThunks.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(getUserFormThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        getUserFormThunk.fulfilled,
+        (state, action: PayloadAction<FormTypeAPI[]>) => {
+          state.status = "idle"
+          state.forms = action.payload
+          state.message = ""
+        },
+      )
+      .addCase(
+        getUserFormThunk.rejected,
         (state, action: PayloadAction<RejectedPayload | undefined>) => {
           state.status = "failed"
           state.error = action.payload?.message

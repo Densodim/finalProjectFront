@@ -41,7 +41,7 @@ export const formsAPI = {
         description,
         categoryId,
         isPublished,
-        isDeleted
+        isDeleted,
       },
       { headers: { Authorization: `Bearer ${token}` } },
     )
@@ -60,6 +60,12 @@ export const formsAPI = {
       { query },
       { headers: { Authorization: `Bearer ${token}` } },
     )
+    return promise
+  },
+  getFormsOneUser(token: string) {
+    const promise = instance.get("form/formsUser", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
     return promise
   },
 }

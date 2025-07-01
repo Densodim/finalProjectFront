@@ -17,7 +17,7 @@ const initialState: LoginSliceState = {
   language: "en",
   message: "",
   isAuthenticated: false,
-  isAuthLoaded: false,
+  isAuthLoaded: false
 }
 
 export const loginAsync = createAsyncThunk<
@@ -161,6 +161,7 @@ export const authSlice = createSlice({
     selectStatus: state => state.status,
     selectIsAuthLoaded: state => state.isAuthLoaded,
     selectToken: state => state.token,
+    selectBlocked: state => state.user?.isActive
   },
 })
 
@@ -175,6 +176,7 @@ export const {
   selectStatus,
   selectIsAuthLoaded,
   selectToken,
+  selectBlocked
 } = authSlice.selectors
 
 //type
