@@ -200,7 +200,7 @@ export const formsSlice = createSlice({
         (state, action: PayloadAction<FormTypeAPI>) => {
           state.status = "idle"
           state.form = action.payload
-          state.message = ""
+          state.message = "The form is successfully created"
         },
       )
       .addCase(
@@ -253,7 +253,7 @@ export const formsSlice = createSlice({
         (state, action: PayloadAction<FormTypeAPI>) => {
           state.status = "idle"
           state.form = action.payload
-          state.message = ""
+          state.message = "The form is successfully updated"
         },
       )
       .addCase(
@@ -306,10 +306,11 @@ export const formsSlice = createSlice({
     selectAllForms: state => state.forms,
     selectStatusForm: state => state.status,
     selectOneForm: state => state.form,
+    selectMessageForms: state => state.message
   },
 })
 
-export const { selectAllForms, selectStatusForm, selectOneForm } =
+export const { selectAllForms, selectStatusForm, selectOneForm, selectMessageForms } =
   formsSlice.selectors
 //types
 type FormsSliceType = {

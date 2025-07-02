@@ -1,4 +1,4 @@
-import { Button, LinearProgress, Link, Stack } from "@mui/material"
+import { Button, LinearProgress, Link, Stack, Typography } from "@mui/material"
 import { translations } from "./lib/translations.ts"
 import WrapperBox from "./components/WrapperBox.tsx"
 import { useFormik } from "formik"
@@ -97,6 +97,7 @@ export default function SignInPage() {
           {t.submitRegister}
         </Link>
       </Stack>
+      <Typography>login:admin@admin.com Password:123456</Typography>
     </WrapperBox>
   )
 }

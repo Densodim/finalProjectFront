@@ -17,9 +17,11 @@ import {
   createFormThunk,
   getAllFormsThunk,
   getUserFormThunk,
+  selectMessageForms,
 } from "../formsSlice.ts"
 import { selectToken } from "../../login/authSlice.ts"
 import ButtonSubmit from "../../../utils/ButtonSubmit.tsx"
+import { enqueueSnackbar } from "notistack"
 
 export default function CreateFormPage({
   open,
@@ -29,6 +31,7 @@ export default function CreateFormPage({
   const dispatch = useAppDispatch()
   const categories = useAppSelector(selectCategories)
   const token = useAppSelector(selectToken)
+  const message = useAppSelector(selectMessageForms)
 
   const formik = useFormik({
     validationSchema: toFormikValidationSchema(zodCreateForm),
@@ -52,6 +55,7 @@ export default function CreateFormPage({
       } else {
         await dispatch(getUserFormThunk(token))
       }
+      enqueueSnackbar(message, { variant: "success" })
     },
   })
 

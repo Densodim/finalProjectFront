@@ -35,14 +35,13 @@ export default function RegisterPage() {
     },
     onSubmit: async values => {
       await dispatch(registerAsync(values))
+      enqueueSnackbar(error?.message, { variant: "error" })
       navigate("/")
     },
   })
-  const handleSubmit = () => {
-    enqueueSnackbar(error?.message, { variant: "error" })
-    setTimeout(() => {
-      navigate("/sign-in")
-    }, 2000)
+
+  const handleBack =()=>{
+    navigate(-1)
   }
 
   if (isLoading === "loading") {
@@ -93,11 +92,10 @@ export default function RegisterPage() {
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
-            onClick={handleSubmit}
           >
             {t.submitRegister}
           </Button>
-          <Button type="submit" variant="outlined" color="primary">
+          <Button type="submit" variant="outlined" color="primary" onClick={handleBack}>
             {t.cancel}
           </Button>
         </Stack>
