@@ -5,6 +5,7 @@ export default function useSurveyJson({ form, questions }: Props) {
   const surveyJson = {
     description: form?.description,
     title: form?.title,
+    logo:form?.fileUrl,
     pages: [
       {
         // description: "PageTest",
@@ -13,7 +14,7 @@ export default function useSurveyJson({ form, questions }: Props) {
         elements: questions?.map(element => ({
           name: element.desctiption,
           title: element.title,
-          type: element.type,
+          type: element.type
         })),
       },
     ],
