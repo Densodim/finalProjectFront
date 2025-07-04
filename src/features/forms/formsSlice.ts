@@ -40,13 +40,14 @@ export const createFormThunk = createAsyncThunk<
   RejectedType
 >(
   "forms/createForm",
-  async ({ token, title, description, categoryId }, { rejectWithValue }) => {
+  async ({ token, title, description, categoryId, file }, { rejectWithValue }) => {
     try {
       const response = await formsAPI.createForm({
         token,
         title,
         description,
         categoryId,
+        file
       })
       return response.data
     } catch (e: any) {

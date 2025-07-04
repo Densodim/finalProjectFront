@@ -32,6 +32,10 @@ const zodForms = z.object({
     required_error: "can be number",
     invalid_type_error: "Invalid type",
   }),
+  fileUrl: z.string({
+    message: "link to the uploaded photo",
+    required_error: "can be string",
+  }),
 })
 
 export type FormTypeAPI = z.infer<typeof zodForms>
