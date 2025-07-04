@@ -1,16 +1,17 @@
 import { instance } from "./instance.ts"
 
 export const formsAPI = {
-  createForm({ token, title, description, categoryId }: CreateFormType) {
-    const promise = instance.post(
-      "form",
-      {
-        title,
-        description,
-        categoryId,
-      },
-      { headers: { Authorization: `Bearer ${token}` } },
-    )
+  createForm({ token, title, description, categoryId, file }: CreateFormType) {
+    const formData = new FormData()
+    formData.append("title", title)
+    formData.append("description", description)
+    formData.append("categoryId", categoryId.toString())
+    if (file) {
+      formData.append("file", file)
+    }
+    const promise = instance.post("form", formData, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
     return promise
   },
   deleteForm({ id, token }: DeleteFormType) {
@@ -75,6 +76,7 @@ export type CreateFormType = {
   title: string
   description: string
   categoryId: number
+  file?: File
 }
 export type DeleteFormType = {
   token: string

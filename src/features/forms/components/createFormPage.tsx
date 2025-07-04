@@ -22,6 +22,18 @@ import {
 import { selectToken } from "../../login/authSlice.ts"
 import ButtonSubmit from "../../../utils/ButtonSubmit.tsx"
 import { enqueueSnackbar } from "notistack"
+import InputFileUpload from "./InputFileUpload.tsx"
+
+const MAX_SIZE = 500000 // 500KB
+const validateImage = (values: { file?: File | null }) => {
+  const errors: { file?: string } = {}
+
+  if (values.file && values.file.size > MAX_SIZE) {
+    errors.file = "Max file size exceeded."
+  }
+
+  return errors
+}
 
 export default function CreateFormPage({
   open,
@@ -39,14 +51,17 @@ export default function CreateFormPage({
       title: "",
       description: "",
       categoryId: "",
+      file: undefined,
     },
+    validate: validateImage,
     onSubmit: async values => {
       await dispatch(
         createFormThunk({
-          token,
-          title: values.title,
-          description: values.description,
           categoryId: Number(values.categoryId),
+          description: values.description,
+          title: values.title,
+          token,
+          file: values.file,
         }),
       )
       setOpen(false)
@@ -101,7 +116,13 @@ export default function CreateFormPage({
                   </MenuItem>
                 ))}
               </Select>
+              <InputFileUpload
+                errors={formik.errors}
+                data={formik.values}
+                setFieldValue={formik.setFieldValue}
+              />
             </FormControl>
+
             <ButtonSubmit>Add Form</ButtonSubmit>
           </Box>
         </Modal>
