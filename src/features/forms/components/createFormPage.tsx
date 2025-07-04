@@ -22,24 +22,28 @@ import {
 import { selectToken } from "../../login/authSlice.ts"
 import ButtonSubmit from "../../../utils/ButtonSubmit.tsx"
 import { enqueueSnackbar } from "notistack"
-import InputFileUpload from "./InputFileUpload.tsx"
+import { useState } from "react"
+import { FilePond } from "react-filepond"
+import type { FilePondFile } from "filepond"
 
-const MAX_SIZE = 500000 // 500KB
-const validateImage = (values: { file?: File | null }) => {
-  const errors: { file?: string } = {}
-
-  if (values.file && values.file.size > MAX_SIZE) {
-    errors.file = "Max file size exceeded."
-  }
-
-  return errors
-}
+// const MAX_SIZE = 500000 // 500KB
+// const validateImage = (values: { file?: File | null }) => {
+//   const errors: { file?: string } = {}
+//
+//   if (values.file && values.file.size > MAX_SIZE) {
+//     errors.file = "Max file size exceeded."
+//   }
+//
+//   return errors
+// }
 
 export default function CreateFormPage({
   open,
   setOpen,
   users = false,
 }: Props) {
+  const [files, setFiles] = useState<FilePondFile[]>([])
+
   const dispatch = useAppDispatch()
   const categories = useAppSelector(selectCategories)
   const token = useAppSelector(selectToken)
@@ -53,15 +57,16 @@ export default function CreateFormPage({
       categoryId: "",
       file: undefined,
     },
-    validate: validateImage,
+    // validate: validateImage,
     onSubmit: async values => {
+      const file = files.length > 0 ? (files[0].file as File) : undefined
       await dispatch(
         createFormThunk({
           categoryId: Number(values.categoryId),
           description: values.description,
           title: values.title,
           token,
-          file: values.file,
+          file,
         }),
       )
       setOpen(false)
@@ -116,10 +121,19 @@ export default function CreateFormPage({
                   </MenuItem>
                 ))}
               </Select>
-              <InputFileUpload
-                errors={formik.errors}
-                data={formik.values}
-                setFieldValue={formik.setFieldValue}
+              {/*<InputFileUpload*/}
+              {/*  errors={formik.errors}*/}
+              {/*  data={formik.values}*/}
+              {/*  setFieldValue={formik.setFieldValue}*/}
+              {/*/>*/}
+              <div><p>Icon Image</p></div>
+              <FilePond
+                // files={files}
+                allowReorder={true}
+                allowMultiple={false}
+                onupdatefiles={setFiles}
+                labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                acceptedFileTypes={["image/*"]}
               />
             </FormControl>
 
