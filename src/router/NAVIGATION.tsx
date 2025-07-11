@@ -17,6 +17,10 @@ export const NAVIGATION: Navigation = [
     icon: <DashboardIcon />,
   },
   {
+    title:"Salesforce",
+    segment:'salesforce'
+  },
+  {
     segment: "admin",
     title: "Admin",
     icon: <AdminPanelSettingsIcon />,

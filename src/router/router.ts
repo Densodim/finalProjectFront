@@ -18,6 +18,7 @@ import UpdateFormPage from "../features/forms/components/UpdateFormPage.tsx"
 import UserPage from "../features/user/UserPage.tsx"
 import SurveyComponent from "../features/survey/SurveyComponent.tsx"
 import BlockedUserPage from "../features/user/BlockedUserPage.tsx"
+import SalesforcePage from "../features/salesforce/SalesforcePage.tsx"
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
                 Component: QuestionsPage,
               },
             ],
+          },
+          {
+            path:"/salesforce",
+            Component:SalesforcePage
           },
           {
             path: "/admin",
