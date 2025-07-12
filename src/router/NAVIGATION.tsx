@@ -17,8 +17,18 @@ export const NAVIGATION: Navigation = [
     icon: <DashboardIcon />,
   },
   {
-    title:"Salesforce",
-    segment:'salesforce'
+    title: "Salesforce",
+    segment: "salesforce",
+  },
+  {
+    title: "Odoo",
+    segment: "odoo",
+    children:[
+      {
+        segment: "odooForm",
+        title: "Odoo Form"
+      }
+    ]
   },
   {
     segment: "admin",
@@ -39,7 +49,7 @@ export const NAVIGATION: Navigation = [
         segment: "categories",
         title: "Categories",
         icon: <CategoryIcon />,
-      }
+      },
     ],
   },
   {
