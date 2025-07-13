@@ -51,9 +51,13 @@ export default function ExternalResultPage() {
         }}
       >
         <Stack spacing={2}>
-          <Button variant="contained" onClick={handleGetAPIToken}>
-            Get API Token
-          </Button>
+          <Stack gap={1} direction={"row"}>
+            <Button variant="contained" onClick={handleGetAPIToken}>
+              Get API Token
+            </Button>
+            <Button variant="contained">Export Form</Button>
+            <Button variant="contained">Import Form</Button>
+          </Stack>
           {apiToken && (
             <Box
               sx={{

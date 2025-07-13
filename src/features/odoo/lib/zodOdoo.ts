@@ -51,3 +51,11 @@ export const zodOdooSurveyID = z.object({
   }),
 })
 export type zodOdooSurveyIDTypeAPI = z.infer<typeof zodOdooSurveyID>
+
+export const zodLinkOdooAPI = z.object({
+  surveyId: z.number(),
+  surveyTitle: z.string(),
+  surveyLink: z.string(),
+  accessToken: z.string(),
+})
+export type zodLinkOdooTypeAPI = z.infer<typeof zodLinkOdooAPI>

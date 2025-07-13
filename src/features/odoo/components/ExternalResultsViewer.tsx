@@ -23,10 +23,10 @@ export default function ExternalResultsViewer() {
   const status = useAppSelector(selectOdooStatus)
 
   useEffect(() => {
-    if (apiToken) {
+    if (apiToken && token && externalResults?.length === 0 && status !== "loading") {
       dispatch(getExternalResultsThunk({ token, apiToken }))
     }
-  }, [])
+  }, [apiToken, token, externalResults?.length, status])
 
   if (status === "loading") {
     return (

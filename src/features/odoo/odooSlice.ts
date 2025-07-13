@@ -1,4 +1,5 @@
 import type {
+  zodLinkOdooTypeAPI,
   zodOdooExternalResultTypeAPI,
   zodOdooFormTypeAPI,
   zodOdooQuestionTypeAPI,
@@ -18,6 +19,7 @@ const initialState: OdooSliceType = {
   externalResult: [],
   surveyID: null,
   APIToken: "",
+  linkOdoo: null,
   status: "idle",
   error: "",
   message: "",
@@ -76,6 +78,18 @@ export const getSurveyIdThunk = createAsyncThunk<
   }
 })
 
+export const getLinkOdooThunk = createAsyncThunk<
+  zodLinkOdooTypeAPI,
+  string,
+  RejectedType
+>("odoo/getLinkOdoo", async (surveyId, { rejectWithValue }) => {
+  try {
+    const response = await odooAPI.getLinkOdoo(surveyId)
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
 
 export const odooSlice = createSlice({
   name: "odoo",
@@ -159,6 +173,25 @@ export const odooSlice = createSlice({
           state.error = action.payload?.message
         },
       )
+      .addCase(getLinkOdooThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        getLinkOdooThunk.fulfilled,
+        (state, action: PayloadAction<zodLinkOdooTypeAPI>) => {
+          state.status = "idle"
+          state.linkOdoo = action.payload
+          state.message = "Ok"
+        },
+      )
+      .addCase(
+        getLinkOdooThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
   },
   selectors: {
     selectOdooForms: state => state.form,
@@ -167,6 +200,7 @@ export const odooSlice = createSlice({
     selectAPIToken: state => state.APIToken,
     selectExternalResult: state => state.externalResult,
     selectSurveyId: state => state.surveyID,
+    selectLinkOdoo: state => state.linkOdoo,
   },
 })
 
@@ -177,6 +211,7 @@ export const {
   selectAPIToken,
   selectExternalResult,
   selectSurveyId,
+  selectLinkOdoo,
 } = odooSlice.selectors
 
 type OdooSliceType = {
@@ -185,6 +220,7 @@ type OdooSliceType = {
   externalResult: zodOdooExternalResultTypeAPI[] | null
   surveyID: zodOdooSurveyIDTypeAPI | null
   APIToken: string
+  linkOdoo: zodLinkOdooTypeAPI | null
   status: "idle" | "loading" | "failed"
   error: string | undefined
   message: string

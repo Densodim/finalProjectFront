@@ -23,4 +23,8 @@ export const odooAPI = {
     const promise = instance.get(`odoo/survey/${id}`)
     return promise
   },
+  getLinkOdoo(surveyId: string) {
+    const promise = instance.get(`odoo/survey/${surveyId}/link`)
+    return promise
+  },
 }
