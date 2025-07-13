@@ -9,6 +9,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { handleThunkError } from "../../utils/handleThunkError.ts"
 import { odooAPI } from "../../api/odooAPI.ts"
 import type { RejectedPayload } from "../login/authSlice.ts"
+import type { RejectedType } from "../admin/adminSlice.ts";
 import { fetchAllUsersThunk } from "../admin/adminSlice.ts"
 
 const initialState: OdooSliceType = {
@@ -36,7 +37,7 @@ export const fetchOdooFormsThunk = createAsyncThunk(
 export const getAPITokenThunk = createAsyncThunk<
   APITokenType,
   string,
-  { rejectValue: RejectedPayload }
+  RejectedType
 >("odoo/APIToken", async (token, { rejectWithValue }) => {
   try {
     const response = await odooAPI.getAPIToken(token)
@@ -45,6 +46,22 @@ export const getAPITokenThunk = createAsyncThunk<
     return rejectWithValue(handleThunkError(e))
   }
 })
+
+export const getExternalResultsThunk = createAsyncThunk<
+  zodOdooExternalResultTypeAPI[],
+  ExternalResultsType,
+  RejectedType
+>(
+  "odoo/getExternalResults",
+  async ({ token, apiToken }, { rejectWithValue }) => {
+    try {
+      const response = await odooAPI.getExternalResults(token, apiToken)
+      return response.data
+    } catch (e: any) {
+      return rejectWithValue(handleThunkError(e))
+    }
+  },
+)
 
 export const odooSlice = createSlice({
   name: "odoo",
@@ -90,12 +107,32 @@ export const odooSlice = createSlice({
           state.error = action.payload?.message
         },
       )
+      .addCase(getExternalResultsThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        getExternalResultsThunk.fulfilled,
+        (state, action: PayloadAction<zodOdooExternalResultTypeAPI[]>) => {
+          state.status = "idle"
+          state.externalResult = action.payload
+          state.message = "Ok"
+        },
+      )
+      .addCase(
+        getExternalResultsThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
   },
   selectors: {
     selectOdooForms: state => state.form,
     selectOdooStatus: state => state.status,
     selectOdooMessage: state => state.message,
     selectAPIToken: state => state.APIToken,
+    selectExternalResult: state => state.externalResult
   },
 })
 
@@ -104,6 +141,7 @@ export const {
   selectOdooStatus,
   selectOdooMessage,
   selectAPIToken,
+  selectExternalResult,
 } = odooSlice.selectors
 
 type OdooSliceType = {
@@ -118,3 +156,6 @@ type OdooSliceType = {
 }
 
 type APITokenType = { apiToken: string }
+type ExternalResultsType = APITokenType & {
+  token: string
+}

@@ -10,4 +10,13 @@ export const odooAPI = {
     })
     return promise
   },
+  getExternalResults(token: string, APIToken: string) {
+    const promise = instance.get("external/results", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: {
+        token: APIToken,
+      },
+    })
+    return promise
+  },
 }

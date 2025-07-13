@@ -7,14 +7,15 @@ import {
 } from "../../login/authSlice.ts"
 import { getAPITokenThunk } from "../odooSlice.ts"
 import { useNavigate } from "react-router"
+import ExternalResultsViewer from "./ExternalResultsViewer.tsx"
 
 export default function ExternalResultPage() {
   const token = useAppSelector(selectToken)
   const dispatch = useAppDispatch()
-  const ApiToken = useAppSelector(selectApiTokenOdoo)
+  const apiToken = useAppSelector(selectApiTokenOdoo)
   const navigate = useNavigate()
 
-  const handlegetAPIToken = async () => {
+  const handleGetAPIToken = async () => {
     await dispatch(getAPITokenThunk(token))
     await dispatch(featchUserFromToken(token))
     navigate("/odoo/externalResult")
@@ -34,10 +35,10 @@ export default function ExternalResultPage() {
         }}
       >
         <Stack spacing={2}>
-          <Button variant="contained" onClick={handlegetAPIToken}>
+          <Button variant="contained" onClick={handleGetAPIToken}>
             Get API Token
           </Button>
-          {ApiToken && (
+          {apiToken && (
             <Box
               sx={{
                 p: 2,
@@ -51,12 +52,13 @@ export default function ExternalResultPage() {
                 Your API Token:
               </Typography>
               <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-                {ApiToken}
+                {apiToken}
               </Typography>
             </Box>
           )}
         </Stack>
       </Box>
+      <ExternalResultsViewer/>
     </>
   )
 }
