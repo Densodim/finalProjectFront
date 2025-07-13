@@ -9,6 +9,7 @@ import TableViewIcon from "@mui/icons-material/TableView"
 import ListAltIcon from "@mui/icons-material/ListAlt"
 import ListIcon from "@mui/icons-material/List"
 import RealEstateAgentIcon from "@mui/icons-material/RealEstateAgent"
+import MicExternalOnIcon from "@mui/icons-material/MicExternalOn"
 
 export const NAVIGATION: Navigation = [
   {
@@ -67,6 +68,11 @@ export const NAVIGATION: Navigation = [
         segment: "odooForm",
         title: "Odoo Form",
         icon: <ListIcon />,
+      },
+      {
+        segment: "externalResult",
+        title: "External Result",
+        icon: <MicExternalOnIcon />,
       },
     ],
   },

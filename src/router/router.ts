@@ -21,6 +21,7 @@ import BlockedUserPage from "../features/user/BlockedUserPage.tsx"
 import SalesforcePage from "../features/salesforce/SalesforcePage.tsx"
 import OdooPage from "../features/odoo/OdooPage.tsx"
 import OdooForm from "../features/odoo/components/OdooForm.tsx"
+import ExternalResultPage from "../features/odoo/components/ExternalResultPage.tsx"
 
 export const router = createBrowserRouter([
   {
@@ -71,6 +72,10 @@ export const router = createBrowserRouter([
               {
                 path: "odooForm",
                 Component: OdooForm,
+              },
+              {
+                path: "externalResult",
+                Component: ExternalResultPage,
               },
             ],
           },

@@ -161,7 +161,8 @@ export const authSlice = createSlice({
     selectStatus: state => state.status,
     selectIsAuthLoaded: state => state.isAuthLoaded,
     selectToken: state => state.token,
-    selectBlocked: state => state.user?.isActive
+    selectBlocked: state => state.user?.isActive,
+    selectApiTokenOdoo: state=> state.user?.apiToken,
   },
 })
 
@@ -176,7 +177,8 @@ export const {
   selectStatus,
   selectIsAuthLoaded,
   selectToken,
-  selectBlocked
+  selectBlocked,
+  selectApiTokenOdoo
 } = authSlice.selectors
 
 //type
