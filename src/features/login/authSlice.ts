@@ -153,6 +153,7 @@ export const authSlice = createSlice({
   },
   selectors: {
     selectLogin: state => state.user,
+    selectUserId: state => state.user?.id,
     selectError: state => state.error,
     selectLanguage: state => state.language,
     selectMessage: state => state.message,
@@ -178,7 +179,8 @@ export const {
   selectIsAuthLoaded,
   selectToken,
   selectBlocked,
-  selectApiTokenOdoo
+  selectApiTokenOdoo,
+  selectUserId
 } = authSlice.selectors
 
 //type

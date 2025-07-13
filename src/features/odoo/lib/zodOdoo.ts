@@ -59,3 +59,26 @@ export const zodLinkOdooAPI = z.object({
   accessToken: z.string(),
 })
 export type zodLinkOdooTypeAPI = z.infer<typeof zodLinkOdooAPI>
+
+const zodImportForms = z.object({
+  id: z.number(),
+  title: z.string(),
+  questionsCount: z.number(),
+  odooId: z.number(),
+})
+export const zodOdooImportFromOdooAPI = z.object({
+  importedCount: z.number(),
+  forms: z.array(zodImportForms).optional(),
+})
+export type zodOdooImportFromOdooTypeAPI = z.infer<
+  typeof zodOdooImportFromOdooAPI
+>
+
+export const zodExportToOdooAPI = z.object({
+  odooSurveyId: z.number(),
+  message: z.string(),
+  formTitle: z.string(),
+  questionsCount: z.number(),
+  surveyLink: z.string(),
+})
+export type zodExportToOdooTypeAPI = z.infer<typeof zodExportToOdooAPI>

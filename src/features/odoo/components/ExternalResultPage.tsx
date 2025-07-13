@@ -11,8 +11,14 @@ import {
   featchUserFromToken,
   selectApiTokenOdoo,
   selectToken,
+  selectUserId,
 } from "../../login/authSlice.ts"
-import { getAPITokenThunk, selectOdooStatus } from "../odooSlice.ts"
+import {
+  getAPITokenThunk,
+  importFromOdooThunk,
+  selectImportedCountImport,
+  selectOdooStatus,
+} from "../odooSlice.ts"
 import { useNavigate } from "react-router"
 import ExternalResultsViewer from "./ExternalResultsViewer.tsx"
 
@@ -22,11 +28,18 @@ export default function ExternalResultPage() {
   const apiToken = useAppSelector(selectApiTokenOdoo)
   const navigate = useNavigate()
   const status = useAppSelector(selectOdooStatus)
+  const userId = useAppSelector(selectUserId)
+  const importedCount = useAppSelector(selectImportedCountImport)
 
   const handleGetAPIToken = async () => {
     await dispatch(getAPITokenThunk(token))
     await dispatch(featchUserFromToken(token))
     navigate("/odoo/externalResult")
+  }
+  const handleImportFromOdoo = () => {
+    if (userId) {
+      dispatch(importFromOdooThunk(userId))
+    }
   }
 
   if (status === "loading") {
@@ -44,7 +57,7 @@ export default function ExternalResultPage() {
         sx={{
           p: 3,
           borderRadius: 2,
-          maxWidth: 500,
+          maxWidth: 600,
           mx: "auto",
           mt: 4,
           textAlign: "center",
@@ -55,8 +68,9 @@ export default function ExternalResultPage() {
             <Button variant="contained" onClick={handleGetAPIToken}>
               Get API Token
             </Button>
-            <Button variant="contained">Export Form</Button>
-            <Button variant="contained">Import Form</Button>
+            <Button variant="contained" onClick={handleImportFromOdoo}>
+              Import Form
+            </Button>
           </Stack>
           {apiToken && (
             <Box
@@ -76,6 +90,9 @@ export default function ExternalResultPage() {
               </Typography>
             </Box>
           )}
+        </Stack>
+        <Stack spacing={2}>
+          <Typography>Import Forms: {importedCount}</Typography>
         </Stack>
       </Box>
       <ExternalResultsViewer />
