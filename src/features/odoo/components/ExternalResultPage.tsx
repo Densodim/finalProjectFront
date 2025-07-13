@@ -1,11 +1,18 @@
-import { Box, Button, Paper, Stack, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  LinearProgress,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts"
 import {
   featchUserFromToken,
   selectApiTokenOdoo,
   selectToken,
 } from "../../login/authSlice.ts"
-import { getAPITokenThunk } from "../odooSlice.ts"
+import { getAPITokenThunk, selectOdooStatus } from "../odooSlice.ts"
 import { useNavigate } from "react-router"
 import ExternalResultsViewer from "./ExternalResultsViewer.tsx"
 
@@ -14,11 +21,20 @@ export default function ExternalResultPage() {
   const dispatch = useAppDispatch()
   const apiToken = useAppSelector(selectApiTokenOdoo)
   const navigate = useNavigate()
+  const status = useAppSelector(selectOdooStatus)
 
   const handleGetAPIToken = async () => {
     await dispatch(getAPITokenThunk(token))
     await dispatch(featchUserFromToken(token))
     navigate("/odoo/externalResult")
+  }
+
+  if (status === "loading") {
+    return (
+      <div style={{ width: "100%" }}>
+        <LinearProgress />
+      </div>
+    )
   }
   return (
     <>
@@ -58,7 +74,7 @@ export default function ExternalResultPage() {
           )}
         </Stack>
       </Box>
-      <ExternalResultsViewer/>
+      <ExternalResultsViewer />
     </>
   )
 }

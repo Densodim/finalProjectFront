@@ -22,6 +22,7 @@ import SalesforcePage from "../features/salesforce/SalesforcePage.tsx"
 import OdooPage from "../features/odoo/OdooPage.tsx"
 import OdooForm from "../features/odoo/components/OdooForm.tsx"
 import ExternalResultPage from "../features/odoo/components/ExternalResultPage.tsx"
+import SurveyIdPage from "../features/odoo/components/SurveyIdPage.tsx"
 
 export const router = createBrowserRouter([
   {
@@ -76,6 +77,10 @@ export const router = createBrowserRouter([
               {
                 path: "externalResult",
                 Component: ExternalResultPage,
+              },
+              {
+                path: "surveyId/:id",
+                Component: SurveyIdPage,
               },
             ],
           },

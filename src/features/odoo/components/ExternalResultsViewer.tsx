@@ -1,10 +1,10 @@
 import { useEffect } from "react"
-import { getExternalResultsThunk, selectExternalResult } from "../odooSlice.ts"
+import { getExternalResultsThunk, selectExternalResult, selectOdooStatus } from "../odooSlice.ts"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks.ts"
 import { selectApiTokenOdoo, selectToken } from "../../login/authSlice.ts"
 import {
   Box,
-  Divider,
+  Divider, LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -12,7 +12,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
+  Typography
 } from "@mui/material"
 
 export default function ExternalResultsViewer() {
@@ -20,11 +20,21 @@ export default function ExternalResultsViewer() {
   const dispatch = useAppDispatch()
   const token = useAppSelector(selectToken)
   const externalResults = useAppSelector(selectExternalResult)
+  const status = useAppSelector(selectOdooStatus)
+
   useEffect(() => {
     if (apiToken) {
       dispatch(getExternalResultsThunk({ token, apiToken }))
     }
   }, [])
+
+  if (status === "loading") {
+    return (
+      <div style={{ width: "100%" }}>
+        <LinearProgress />
+      </div>
+    )
+  }
 
   return (
     <>

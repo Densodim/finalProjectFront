@@ -19,4 +19,8 @@ export const odooAPI = {
     })
     return promise
   },
+  getSurveyId(id: string) {
+    const promise = instance.get(`odoo/survey/${id}`)
+    return promise
+  },
 }

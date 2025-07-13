@@ -9,7 +9,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { handleThunkError } from "../../utils/handleThunkError.ts"
 import { odooAPI } from "../../api/odooAPI.ts"
 import type { RejectedPayload } from "../login/authSlice.ts"
-import type { RejectedType } from "../admin/adminSlice.ts";
+import type { RejectedType } from "../admin/adminSlice.ts"
 import { fetchAllUsersThunk } from "../admin/adminSlice.ts"
 
 const initialState: OdooSliceType = {
@@ -62,6 +62,20 @@ export const getExternalResultsThunk = createAsyncThunk<
     }
   },
 )
+
+export const getSurveyIdThunk = createAsyncThunk<
+  zodOdooSurveyIDTypeAPI,
+  string,
+  RejectedType
+>("odoo/getSurveyId", async (id, { rejectWithValue }) => {
+  try {
+    const response = await odooAPI.getSurveyId(id)
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
+
 
 export const odooSlice = createSlice({
   name: "odoo",
@@ -126,13 +140,33 @@ export const odooSlice = createSlice({
           state.error = action.payload?.message
         },
       )
+      .addCase(getSurveyIdThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        getSurveyIdThunk.fulfilled,
+        (state, action: PayloadAction<zodOdooSurveyIDTypeAPI>) => {
+          state.status = "idle"
+          state.surveyID = action.payload
+          state.message = "Ok"
+        },
+      )
+      .addCase(
+        getSurveyIdThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
   },
   selectors: {
     selectOdooForms: state => state.form,
     selectOdooStatus: state => state.status,
     selectOdooMessage: state => state.message,
     selectAPIToken: state => state.APIToken,
-    selectExternalResult: state => state.externalResult
+    selectExternalResult: state => state.externalResult,
+    selectSurveyId: state => state.surveyID,
   },
 })
 
@@ -142,6 +176,7 @@ export const {
   selectOdooMessage,
   selectAPIToken,
   selectExternalResult,
+  selectSurveyId,
 } = odooSlice.selectors
 
 type OdooSliceType = {

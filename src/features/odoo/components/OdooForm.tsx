@@ -15,13 +15,13 @@ import {
   selectOdooForms,
   selectOdooStatus,
 } from "../odooSlice.ts"
+import { Link } from "react-router"
 
 const TITLE = ["ID", "title", "description"]
 export default function OdooForm() {
   const dispatch = useAppDispatch()
   const status = useAppSelector(selectOdooStatus)
   const odooForms = useAppSelector(selectOdooForms)
-  console.log(odooForms)
 
   useEffect(() => {
     dispatch(fetchOdooFormsThunk())
@@ -40,11 +40,11 @@ export default function OdooForm() {
       <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
         <Table sx={{ minWidth: 400 }} size="small">
           <TableHead>
-            <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
               {TITLE.map((el, index) => (
                 <TableCell
                   key={index}
-                  sx={{ fontWeight: 'bold', textAlign: 'center', py: 1 }}
+                  sx={{ fontWeight: "bold", textAlign: "center", py: 1 }}
                 >
                   {el}
                 </TableCell>
@@ -57,12 +57,21 @@ export default function OdooForm() {
                 key={row.id}
                 hover
                 sx={{
-                  '&:last-child td, &:last-child th': { border: 0 },
-                  '&:hover': { backgroundColor: '#f0f0f0' },
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  "&:hover": { backgroundColor: "#f0f0f0" },
                 }}
               >
-                <TableCell component="th" scope="row" sx={{ textAlign: 'center' }}>
-                  {row.id}
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ textAlign: "center" }}
+                >
+                  <Link
+                    to={`/odoo/surveyId/${row.id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    {row.id}
+                  </Link>
                 </TableCell>
                 <TableCell align="center">{row.title}</TableCell>
                 <TableCell align="center">{row.description}</TableCell>
