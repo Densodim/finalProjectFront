@@ -15,6 +15,7 @@ import { formsSlice } from "../features/forms/formsSlice.ts";
 import { categoriesSlice } from "../features/categories/categoriesSlice.ts";
 import { questionsSlice } from "../features/questions/questionsSlice.ts";
 import { salesforceSlice } from "../features/salesforce/salesforceSlice.ts";
+import { odooSlice } from "../features/odoo/odooSlice.ts"
 
 const rootReducer = combineSlices(
   authSlice,
@@ -22,7 +23,8 @@ const rootReducer = combineSlices(
   formsSlice,
   categoriesSlice,
   questionsSlice,
-  salesforceSlice
+  salesforceSlice,
+  odooSlice
 );
 
 export type RootState = ReturnType<typeof rootReducer>;
