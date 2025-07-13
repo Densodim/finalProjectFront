@@ -6,6 +6,10 @@ import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter"
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered"
 import CategoryIcon from "@mui/icons-material/Category"
 import TableViewIcon from "@mui/icons-material/TableView"
+import ListAltIcon from "@mui/icons-material/ListAlt"
+import ListIcon from "@mui/icons-material/List"
+import RealEstateAgentIcon from "@mui/icons-material/RealEstateAgent"
+import MicExternalOnIcon from "@mui/icons-material/MicExternalOn"
 
 export const NAVIGATION: Navigation = [
   {
@@ -15,10 +19,6 @@ export const NAVIGATION: Navigation = [
   {
     title: "Home page",
     icon: <DashboardIcon />,
-  },
-  {
-    title:"Salesforce",
-    segment:'salesforce'
   },
   {
     segment: "admin",
@@ -39,7 +39,7 @@ export const NAVIGATION: Navigation = [
         segment: "categories",
         title: "Categories",
         icon: <CategoryIcon />,
-      }
+      },
     ],
   },
   {
@@ -51,6 +51,28 @@ export const NAVIGATION: Navigation = [
         segment: "viewUserForm",
         title: "View User Forms",
         icon: <TableViewIcon />,
+      },
+    ],
+  },
+  {
+    title: "Salesforce",
+    segment: "salesforce",
+    icon: <RealEstateAgentIcon />,
+  },
+  {
+    title: "Odoo",
+    segment: "odoo",
+    icon: <ListAltIcon />,
+    children: [
+      {
+        segment: "odooForm",
+        title: "Odoo Form",
+        icon: <ListIcon />,
+      },
+      {
+        segment: "externalResult",
+        title: "External Result",
+        icon: <MicExternalOnIcon />,
       },
     ],
   },

@@ -52,6 +52,7 @@ export const zodLogin = z
       updatedAt: z.string({
         required_error: "Update date is required",
       }),
+      apiToken: z.string().describe("API Token to odoo"),
     }),
     token: z
       .string({

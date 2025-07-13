@@ -19,6 +19,9 @@ import UserPage from "../features/user/UserPage.tsx"
 import SurveyComponent from "../features/survey/SurveyComponent.tsx"
 import BlockedUserPage from "../features/user/BlockedUserPage.tsx"
 import SalesforcePage from "../features/salesforce/SalesforcePage.tsx"
+import OdooPage from "../features/odoo/OdooPage.tsx"
+import OdooForm from "../features/odoo/components/OdooForm.tsx"
+import ExternalResultPage from "../features/odoo/components/ExternalResultPage.tsx"
 
 export const router = createBrowserRouter([
   {
@@ -59,8 +62,22 @@ export const router = createBrowserRouter([
             ],
           },
           {
-            path:"/salesforce",
-            Component:SalesforcePage
+            path: "/salesforce",
+            Component: SalesforcePage,
+          },
+          {
+            path: "/odoo",
+            Component: OdooPage,
+            children: [
+              {
+                path: "odooForm",
+                Component: OdooForm,
+              },
+              {
+                path: "externalResult",
+                Component: ExternalResultPage,
+              },
+            ],
           },
           {
             path: "/admin",
