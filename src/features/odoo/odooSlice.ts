@@ -1,6 +1,8 @@
 import type {
+  zodLinkOdooTypeAPI,
   zodOdooExternalResultTypeAPI,
   zodOdooFormTypeAPI,
+  zodOdooImportFromOdooTypeAPI,
   zodOdooQuestionTypeAPI,
   zodOdooSurveyIDTypeAPI,
 } from "./lib/zodOdoo.ts"
@@ -9,7 +11,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { handleThunkError } from "../../utils/handleThunkError.ts"
 import { odooAPI } from "../../api/odooAPI.ts"
 import type { RejectedPayload } from "../login/authSlice.ts"
-import type { RejectedType } from "../admin/adminSlice.ts";
+import type { RejectedType } from "../admin/adminSlice.ts"
 import { fetchAllUsersThunk } from "../admin/adminSlice.ts"
 
 const initialState: OdooSliceType = {
@@ -18,6 +20,8 @@ const initialState: OdooSliceType = {
   externalResult: [],
   surveyID: null,
   APIToken: "",
+  linkOdoo: null,
+  importFromOdoo: null,
   status: "idle",
   error: "",
   message: "",
@@ -62,6 +66,47 @@ export const getExternalResultsThunk = createAsyncThunk<
     }
   },
 )
+
+export const getSurveyIdThunk = createAsyncThunk<
+  zodOdooSurveyIDTypeAPI,
+  string,
+  RejectedType
+>("odoo/getSurveyId", async (id, { rejectWithValue }) => {
+  try {
+    const response = await odooAPI.getSurveyId(id)
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
+
+export const getLinkOdooThunk = createAsyncThunk<
+  zodLinkOdooTypeAPI,
+  string,
+  RejectedType
+>("odoo/getLinkOdoo", async (surveyId, { rejectWithValue }) => {
+  try {
+    const response = await odooAPI.getLinkOdoo(surveyId)
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
+
+export const importFromOdooThunk = createAsyncThunk<
+  zodOdooImportFromOdooTypeAPI,
+  number,
+  RejectedType
+>("odoo/importFromOdoo", async (userId, { rejectWithValue }) => {
+  try {
+    const response = await odooAPI.importFromOdoo(userId)
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
+
+// export const exportToOdooThunk =
 
 export const odooSlice = createSlice({
   name: "odoo",
@@ -126,13 +171,73 @@ export const odooSlice = createSlice({
           state.error = action.payload?.message
         },
       )
+      .addCase(getSurveyIdThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        getSurveyIdThunk.fulfilled,
+        (state, action: PayloadAction<zodOdooSurveyIDTypeAPI>) => {
+          state.status = "idle"
+          state.surveyID = action.payload
+          state.message = "Ok"
+        },
+      )
+      .addCase(
+        getSurveyIdThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(getLinkOdooThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        getLinkOdooThunk.fulfilled,
+        (state, action: PayloadAction<zodLinkOdooTypeAPI>) => {
+          state.status = "idle"
+          state.linkOdoo = action.payload
+          state.message = "Ok"
+        },
+      )
+      .addCase(
+        getLinkOdooThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
+      .addCase(importFromOdooThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        importFromOdooThunk.fulfilled,
+        (state, action: PayloadAction<zodOdooImportFromOdooTypeAPI>) => {
+          state.status = "idle"
+          state.importFromOdoo = action.payload
+          state.message = "Ok"
+        },
+      )
+      .addCase(
+        importFromOdooThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
   },
   selectors: {
     selectOdooForms: state => state.form,
     selectOdooStatus: state => state.status,
     selectOdooMessage: state => state.message,
     selectAPIToken: state => state.APIToken,
-    selectExternalResult: state => state.externalResult
+    selectExternalResult: state => state.externalResult,
+    selectSurveyId: state => state.surveyID,
+    selectLinkOdoo: state => state.linkOdoo,
+    selectImportedCountImport: state => state.importFromOdoo?.importedCount,
   },
 })
 
@@ -142,6 +247,9 @@ export const {
   selectOdooMessage,
   selectAPIToken,
   selectExternalResult,
+  selectSurveyId,
+  selectLinkOdoo,
+  selectImportedCountImport,
 } = odooSlice.selectors
 
 type OdooSliceType = {
@@ -150,6 +258,8 @@ type OdooSliceType = {
   externalResult: zodOdooExternalResultTypeAPI[] | null
   surveyID: zodOdooSurveyIDTypeAPI | null
   APIToken: string
+  linkOdoo: zodLinkOdooTypeAPI | null
+  importFromOdoo: zodOdooImportFromOdooTypeAPI | null
   status: "idle" | "loading" | "failed"
   error: string | undefined
   message: string

@@ -18,6 +18,7 @@ import {
   getUserFormThunk,
   selectStatusForm,
 } from "../forms/formsSlice.ts"
+import ImportExportIcon from "@mui/icons-material/ImportExport"
 
 export default function UserPage() {
   const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>()
@@ -46,6 +47,8 @@ export default function UserPage() {
     setSelectedRows(undefined)
   }
 
+  const handleExportToOdoo = () => {}
+
   const handleCreateForm = () => {
     setCreateForm(prevState => !prevState)
   }
@@ -72,6 +75,13 @@ export default function UserPage() {
           disabled={!selectedRows?.ids && selectedRows === undefined}
         >
           Delete
+        </Button>
+        <Button
+          startIcon={<ImportExportIcon />}
+          color='primary'
+          onClick={handleExportToOdoo}
+        >
+          Export Form
         </Button>
       </ButtonGroup>
 

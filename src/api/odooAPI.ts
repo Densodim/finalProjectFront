@@ -19,4 +19,20 @@ export const odooAPI = {
     })
     return promise
   },
+  getSurveyId(id: string) {
+    const promise = instance.get(`odoo/survey/${id}`)
+    return promise
+  },
+  getLinkOdoo(surveyId: string) {
+    const promise = instance.get(`odoo/survey/${surveyId}/link`)
+    return promise
+  },
+  importFromOdoo(userId: number) {
+    const promise = instance.post("odoo/import-from-odoo", { userId })
+    return promise
+  },
+  exportToOdoo(formId: number) {
+    const promise = instance.post("odoo/export-to-odoo", { formId })
+    return promise
+  },
 }
