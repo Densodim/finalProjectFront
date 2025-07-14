@@ -1,5 +1,12 @@
 import CreateFormPage from "../forms/components/createFormPage.tsx"
-import { Button, ButtonGroup, LinearProgress, Paper } from "@mui/material"
+import {
+  Button,
+  ButtonGroup,
+  LinearProgress,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { DataGrid, type GridRowSelectionModel } from "@mui/x-data-grid"
@@ -19,6 +26,7 @@ import {
   selectStatusForm,
 } from "../forms/formsSlice.ts"
 import ImportExportIcon from "@mui/icons-material/ImportExport"
+import { exportToOdooThunk, selectExportCountQuestionOdoo, selectOdooMessage } from "../odoo/odooSlice.ts"
 
 export default function UserPage() {
   const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>()
@@ -31,6 +39,8 @@ export default function UserPage() {
   const columns = useColumsForms()
   const statusCategory = useAppSelector(selectStatusCategories)
   const statusForm = useAppSelector(selectStatusForm)
+  const messagOdoo = useAppSelector(selectOdooMessage)
+  const exportCountQuestion = useAppSelector(selectExportCountQuestionOdoo)
 
   useEffect(() => {
     dispatch(getUserFormThunk(token))
@@ -47,7 +57,12 @@ export default function UserPage() {
     setSelectedRows(undefined)
   }
 
-  const handleExportToOdoo = () => {}
+  const handleExportToOdoo = async () => {
+    for (const id of gridRowId) {
+      await dispatch(exportToOdooThunk(Number(id)))
+    }
+    setSelectedRows(undefined)
+  }
 
   const handleCreateForm = () => {
     setCreateForm(prevState => !prevState)
@@ -78,12 +93,15 @@ export default function UserPage() {
         </Button>
         <Button
           startIcon={<ImportExportIcon />}
-          color='primary'
+          color="primary"
           onClick={handleExportToOdoo}
         >
           Export Form
         </Button>
       </ButtonGroup>
+      <Stack spacing={2} direction="column">
+        <Typography>{messagOdoo} : {exportCountQuestion}</Typography>
+      </Stack>
 
       <Paper sx={{ height: "100%", width: "100%" }}>
         <DataGrid
