@@ -23,6 +23,7 @@ import OdooPage from "../features/odoo/OdooPage.tsx"
 import OdooForm from "../features/odoo/components/OdooForm.tsx"
 import ExternalResultPage from "../features/odoo/components/ExternalResultPage.tsx"
 import SurveyIdPage from "../features/odoo/components/SurveyIdPage.tsx"
+import DropboxPage from "../features/dropbox/DropboxPage.tsx"
 
 export const router = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ export const router = createBrowserRouter([
                 Component: SurveyIdPage,
               },
             ],
+          },
+          {
+            path: "dropbox",
+            Component: DropboxPage,
           },
           {
             path: "/admin",

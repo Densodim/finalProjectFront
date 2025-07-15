@@ -10,6 +10,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt"
 import ListIcon from "@mui/icons-material/List"
 import RealEstateAgentIcon from "@mui/icons-material/RealEstateAgent"
 import MicExternalOnIcon from "@mui/icons-material/MicExternalOn"
+import CloudUploadIcon from "@mui/icons-material/CloudUpload"
 
 export const NAVIGATION: Navigation = [
   {
@@ -75,5 +76,10 @@ export const NAVIGATION: Navigation = [
         icon: <MicExternalOnIcon />,
       },
     ],
+  },
+  {
+    title: "Dropbox",
+    segment: "dropbox",
+    icon: <CloudUploadIcon />,
   },
 ]

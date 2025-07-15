@@ -1,4 +1,5 @@
-import type {
+import {
+  zodExportToOdooTypeAPI,
   zodLinkOdooTypeAPI,
   zodOdooExternalResultTypeAPI,
   zodOdooFormTypeAPI,
@@ -22,6 +23,7 @@ const initialState: OdooSliceType = {
   APIToken: "",
   linkOdoo: null,
   importFromOdoo: null,
+  exportToOdoo: null,
   status: "idle",
   error: "",
   message: "",
@@ -106,7 +108,18 @@ export const importFromOdooThunk = createAsyncThunk<
   }
 })
 
-// export const exportToOdooThunk =
+export const exportToOdooThunk = createAsyncThunk<
+  zodExportToOdooTypeAPI,
+  number,
+  RejectedType
+>("odoo/exportToOdoo", async (formId, { rejectWithValue }) => {
+  try {
+    const response = await odooAPI.exportToOdoo(formId)
+    return response.data
+  } catch (e: any) {
+    return rejectWithValue(handleThunkError(e))
+  }
+})
 
 export const odooSlice = createSlice({
   name: "odoo",
@@ -228,6 +241,25 @@ export const odooSlice = createSlice({
           state.error = action.payload?.message
         },
       )
+      .addCase(exportToOdooThunk.pending, state => {
+        state.status = "loading"
+        state.message = "Loading ..."
+      })
+      .addCase(
+        exportToOdooThunk.fulfilled,
+        (state, action: PayloadAction<zodExportToOdooTypeAPI>) => {
+          state.status = "idle"
+          state.message = action.payload.message
+          state.exportToOdoo = action.payload
+        },
+      )
+      .addCase(
+        exportToOdooThunk.rejected,
+        (state, action: PayloadAction<RejectedPayload | undefined>) => {
+          state.status = "failed"
+          state.error = action.payload?.message
+        },
+      )
   },
   selectors: {
     selectOdooForms: state => state.form,
@@ -238,6 +270,7 @@ export const odooSlice = createSlice({
     selectSurveyId: state => state.surveyID,
     selectLinkOdoo: state => state.linkOdoo,
     selectImportedCountImport: state => state.importFromOdoo?.importedCount,
+    selectExportCountQuestionOdoo: state=> state.exportToOdoo?.questionsCount
   },
 })
 
@@ -250,6 +283,7 @@ export const {
   selectSurveyId,
   selectLinkOdoo,
   selectImportedCountImport,
+  selectExportCountQuestionOdoo
 } = odooSlice.selectors
 
 type OdooSliceType = {
@@ -260,6 +294,7 @@ type OdooSliceType = {
   APIToken: string
   linkOdoo: zodLinkOdooTypeAPI | null
   importFromOdoo: zodOdooImportFromOdooTypeAPI | null
+  exportToOdoo: zodExportToOdooTypeAPI | null
   status: "idle" | "loading" | "failed"
   error: string | undefined
   message: string
