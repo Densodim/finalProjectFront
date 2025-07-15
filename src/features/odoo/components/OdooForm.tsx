@@ -17,7 +17,7 @@ import {
 } from "../odooSlice.ts"
 import { Link } from "react-router"
 
-const TITLE = ["ID", "title", "description"]
+const TITLE = ["ID", "title", "description", "Response"]
 export default function OdooForm() {
   const dispatch = useAppDispatch()
   const status = useAppSelector(selectOdooStatus)
@@ -75,6 +75,14 @@ export default function OdooForm() {
                 </TableCell>
                 <TableCell align="center">{row.title}</TableCell>
                 <TableCell align="center">{row.description}</TableCell>
+                <TableCell align="center">
+                  <Link
+                    to={`/odoo/response/${row.id}`}
+                    style={{ textDecoration: "blink", color: "inherit" }}
+                  >
+                    View
+                  </Link>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

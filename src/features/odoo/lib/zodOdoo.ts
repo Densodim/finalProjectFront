@@ -82,3 +82,48 @@ export const zodExportToOdooAPI = z.object({
   surveyLink: z.string(),
 })
 export type zodExportToOdooTypeAPI = z.infer<typeof zodExportToOdooAPI>
+
+const zodResultDropbox = z.object({
+  name: z.string(),
+  path_lower: z.string(),
+  path_display: z.string(),
+  id: z.string(),
+  client_modified: z.string(),
+  server_modified: z.string(),
+  rev: z.string(),
+  size: z.number(),
+  is_downloadable: z.boolean(),
+  content_hash: z.string(),
+})
+
+const zodUserInput = z.object({
+  id: z.string(),
+  survey_id: z.array(z.number(), z.string()),
+  state: z.string(),
+  create_date: z.string(),
+  partner_id: z.array(z.number(), z.string()),
+})
+
+const zodAnswers = z.object({
+  id: z.number(),
+  display_name:z.string(),
+  skipped:z.boolean(),
+  answer_type: z.string(),
+  suggested_answer_id: z.array(z.number(), z.string()),
+  create_date: z.string(),
+  write_date: z.string(),
+})
+const zodResponse = z.object({
+  userInput:zodUserInput,
+  answers: z.array(zodAnswers)
+})
+export const zodResponseAPI = z.object({
+  responses:z.array(zodResponse),
+  dropbox:z.object({
+    status:z.number(),
+    headers:z.object({}),
+    result: zodResultDropbox
+  })
+})
+
+export type zodResponseTypeAPI = z.infer<typeof zodResponseAPI>
