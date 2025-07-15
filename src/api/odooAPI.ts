@@ -35,4 +35,8 @@ export const odooAPI = {
     const promise = instance.post("odoo/export-to-odoo", { formId })
     return promise
   },
+  getResponse(formId: string) {
+    const promise = instance.get(`odoo/survey/${formId}/responses`)
+    return promise
+  },
 }
