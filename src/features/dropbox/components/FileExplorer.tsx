@@ -5,36 +5,10 @@ import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault"
 import type { TreeViewBaseItem } from "@mui/x-tree-view"
 import { TreeItem, treeItemClasses } from "@mui/x-tree-view"
-
-const MUI_X_PRODUCTS: TreeViewBaseItem[] = [
-  {
-    id: "grid",
-    label: "Data Grid",
-    children: [
-      { id: "grid-community", label: "@mui/x-data-grid" },
-      { id: "grid-pro", label: "@mui/x-data-grid-pro" },
-      { id: "grid-premium", label: "@mui/x-data-grid-premium" },
-    ],
-  },
-  {
-    id: "pickers",
-    label: "Date and Time Pickers",
-    children: [
-      { id: "pickers-community", label: "@mui/x-date-pickers" },
-      { id: "pickers-pro", label: "@mui/x-date-pickers-pro" },
-    ],
-  },
-  {
-    id: "charts",
-    label: "Charts",
-    children: [{ id: "charts-community", label: "@mui/x-charts" }],
-  },
-  {
-    id: "tree-view",
-    label: "Tree View",
-    children: [{ id: "tree-view-community", label: "@mui/x-tree-view" }],
-  },
-]
+import type { ReturnFileType } from "../lib/listFolders.ts"
+import { listFolders } from "../lib/listFolders.ts"
+import { useEffect, useState } from "react"
+import { enqueueSnackbar } from "notistack"
 
 const CustomTreeItem = styled(TreeItem)({
   [`& .${treeItemClasses.iconContainer}`]: {
@@ -45,6 +19,33 @@ const CustomTreeItem = styled(TreeItem)({
 })
 
 export default function FileExplorer() {
+  const [list, setList] = useState<ReturnFileType>([])
+  useEffect(() => {
+    listFolders("/")
+      .then(folders => {
+        setList(folders)
+        enqueueSnackbar("File and folder successfully updated", {
+          variant: "success",
+        })
+      })
+      .catch(err => {
+        enqueueSnackbar(`Error: ${err}`, { variant: "error" })
+      })
+  }, [])
+
+  const MUI_X_DROPBOX: TreeViewBaseItem[] = list
+    .filter(el => el[".tag"] === "folder")
+    .map(folder => ({
+      id: folder.id,
+      label: folder.name,
+      children: list
+        .filter(file => file[".tag"] === "file")
+        .map(file => ({
+          id: file.name || "",
+          label: file.name,
+        })),
+    }))
+
   return (
     <Box sx={{ minHeight: 352, minWidth: 250 }}>
       <RichTreeView
@@ -55,7 +56,7 @@ export default function FileExplorer() {
           endIcon: DisabledByDefaultIcon,
           item: CustomTreeItem,
         }}
-        items={MUI_X_PRODUCTS}
+        items={MUI_X_DROPBOX}
       />
     </Box>
   )

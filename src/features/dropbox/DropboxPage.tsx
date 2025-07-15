@@ -1,4 +1,3 @@
-import { listFolders } from "./lib/listFolders.ts"
 import { uploadFileToDropbox } from "./lib/uploadFileToDropbox.ts"
 import type { ChangeEvent } from "react"
 import { Stack } from "@mui/material"
@@ -21,14 +20,6 @@ export default function DropboxPage() {
       enqueueSnackbar(`File upload error: ${err}`, { variant: "error" })
     }
   }
-
-  listFolders("/")
-    .then(folders => {
-      console.log("Folders in root:", folders)
-    })
-    .catch(err => {
-      console.error("Error:", err)
-    })
 
   return (
     <>
