@@ -22,6 +22,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.2",
     "@mui/material": "^7.1.2",
+    "@mui/x-tree-view": "^8.8.0",
     "@reduxjs/toolkit": "^2.6.1",
     "@toolpad/core": "^0.16.0",
     "axios": "^1.10.0",

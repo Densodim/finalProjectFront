@@ -1,6 +1,10 @@
 import { listFolders } from "./lib/listFolders.ts"
 import { uploadFileToDropbox } from "./lib/uploadFileToDropbox.ts"
 import type { ChangeEvent } from "react"
+import { Stack } from "@mui/material"
+import FileExplorer from "./components/FileExplorer.tsx"
+import InputFileUploadDropbox from "./components/InputFileUploadDropbox.tsx"
+import { enqueueSnackbar } from "notistack"
 
 export default function DropboxPage() {
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -10,9 +14,11 @@ export default function DropboxPage() {
         const dropboxPath = `/${file.name}`
         await uploadFileToDropbox(dropboxPath, file)
       }
-      console.log("The file is successfully uploaded")
+      enqueueSnackbar("The file is successfully uploaded", {
+        variant: "success",
+      })
     } catch (err) {
-      console.error("File upload error:", err)
+      enqueueSnackbar(`File upload error: ${err}`, { variant: "error" })
     }
   }
 
@@ -27,8 +33,12 @@ export default function DropboxPage() {
   return (
     <>
       <div>
-        <input type="file" onChange={handleFileUpload} />
+        <InputFileUploadDropbox onChange={handleFileUpload} />
       </div>
+
+      <Stack>
+        <FileExplorer />
+      </Stack>
     </>
   )
 }
